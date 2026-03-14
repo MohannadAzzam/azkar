@@ -1,18 +1,20 @@
-import 'package:azkar/presentation/screens/home_screen.dart';
+import 'package:azkar/app_router.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const AzkarApp());
+  runApp(AzkarApp(appRouter: AppRouter()));
 }
 
 class AzkarApp extends StatelessWidget {
-  const AzkarApp({super.key});
+  final AppRouter appRouter;
+
+  const AzkarApp({super.key, required this.appRouter});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const HomeScreen(),
+      onGenerateRoute: appRouter.generateRoute,
     );
   }
 }
