@@ -1,8 +1,10 @@
-import 'package:azkar/business_logic/cubit/zikir_cubit.dart';
+import '../../business_logic/cubit/zikir_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,10 +26,16 @@ class HomeScreen extends StatelessWidget {
                   elevation: 4,
                   margin: EdgeInsets.only(bottom: 12),
                   child: ListTile(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 10,
+                    ),
                     title: Text(
                       category.category,
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     trailing: Icon(Icons.arrow_forward_ios, size: 18),
                     onTap: () {

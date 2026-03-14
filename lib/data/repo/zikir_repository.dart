@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:azkar/data/models/zikir_category.dart';
+import '../models/zikir_category.dart';
 import 'package:flutter/services.dart';
 
 class ZikirRepository {
