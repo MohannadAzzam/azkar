@@ -26,7 +26,7 @@ class HomeScreen extends StatelessWidget {
 
                   child: ListTile(
                     contentPadding: EdgeInsets.symmetric(
-                      horizontal: 20,
+                      horizontal: 20, 
                       vertical: 10,
                     ),
 

@@ -61,7 +61,7 @@ class AppTheme {
         backgroundColor: primaryGreen,
         foregroundColor: Colors.white,
         centerTitle: true,
-        titleTextStyle: GoogleFonts.cairo(
+        titleTextStyle: GoogleFonts.aDLaMDisplay(
           fontSize: 22,
           fontWeight: FontWeight.bold,
         ),
