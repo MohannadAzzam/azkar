@@ -3,15 +3,23 @@ class ZikirCategory {
   final String category;
   final List<ZikirItem> content;
 
-  ZikirCategory({required this.id, required this.category, required this.content});
+  ZikirCategory({
+    required this.id,
+    required this.category,
+    required this.content,
+  });
 
   factory ZikirCategory.fromJson(Map<String, dynamic> json) {
     return ZikirCategory(
       id: json['id'],
       category: json['category'],
-      content: (json['content'] as List).map((i) => ZikirItem.fromJson(i)).toList(),
+      content: (json['content'] as List)
+          .map((i) => ZikirItem.fromJson(i))
+          .toList(),
     );
   }
+
+  Object? operator [](String other) {}
 }
 
 class ZikirItem {
@@ -19,7 +27,11 @@ class ZikirItem {
   final int count;
   final String description;
 
-  ZikirItem({required this.text, required this.count, required this.description});
+  ZikirItem({
+    required this.text,
+    required this.count,
+    required this.description,
+  });
 
   factory ZikirItem.fromJson(Map<String, dynamic> json) {
     return ZikirItem(

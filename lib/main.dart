@@ -1,17 +1,9 @@
 import 'app_router.dart';
-import 'business_logic/cubit/zikir_cubit.dart';
-import 'data/repo/zikir_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
-  runApp(
-    BlocProvider(
-      create: (context) => ZikirCubit(ZikirRepository())..loadAzkar(),
-      child: AzkarApp(appRouter: AppRouter()),
-    ),
-  );
+  runApp(AzkarApp(appRouter: AppRouter()));
 }
 
 class AzkarApp extends StatelessWidget {
@@ -41,24 +33,35 @@ class AppTheme {
       useMaterial3: true,
       primaryColor: primaryGreen,
       scaffoldBackgroundColor: backgroundBeige,
-      
+
       // تطبيق خط Cairo كخط افتراضي لكل التطبيق
-      textTheme: GoogleFonts.cairoTextTheme(const TextTheme(
-        displayLarge: TextStyle(color: textDark, fontSize: 28, fontWeight: FontWeight.bold),
-        bodyLarge: TextStyle(color: textDark, fontSize: 18),
-        bodyMedium: TextStyle(color: Colors.grey, fontSize: 14),
-      )).copyWith(
-        // تخصيص خط Amiri للعناوين الكبيرة أو نصوص الأذكار
-        displayMedium: GoogleFonts.cairo(
-          textStyle: const TextStyle(color: primaryGreen, fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-      ),
+      textTheme:
+          GoogleFonts.cairoTextTheme(
+            const TextTheme(
+              displayLarge: TextStyle(
+                color: textDark,
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+              bodyLarge: TextStyle(color: textDark, fontSize: 18),
+              bodyMedium: TextStyle(color: Colors.grey, fontSize: 14),
+            ),
+          ).copyWith(
+            // تخصيص خط Amiri للعناوين الكبيرة أو نصوص الأذكار
+            displayMedium: GoogleFonts.cairo(
+              textStyle: const TextStyle(
+                color: primaryGreen,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
 
       appBarTheme: AppBarTheme(
         backgroundColor: primaryGreen,
         foregroundColor: Colors.white,
         centerTitle: true,
-        titleTextStyle: GoogleFonts.cairo( 
+        titleTextStyle: GoogleFonts.cairo(
           fontSize: 22,
           fontWeight: FontWeight.bold,
         ),
@@ -74,8 +77,13 @@ class AppTheme {
         style: ElevatedButton.styleFrom(
           backgroundColor: accentGold,
           foregroundColor: Colors.white,
-          textStyle: GoogleFonts.cairo(fontWeight: FontWeight.bold, fontSize: 18),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+          textStyle: GoogleFonts.cairo(
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50),
+          ),
         ),
       ),
     );

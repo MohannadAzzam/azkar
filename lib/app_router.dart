@@ -1,3 +1,7 @@
+import 'package:azkar/business_logic/cubit/zikir_cubit.dart';
+import 'package:azkar/data/repo/zikir_repository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'constants/strings.dart';
 import 'presentation/screens/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +10,12 @@ class AppRouter {
   Route? generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case homeScreen:
-        return MaterialPageRoute(builder: (_) => HomeScreen());
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => ZikirCubit(ZikirRepository())..loadAzkar(),
+            child: HomeScreen(),
+          ),
+        );
     }
     return null;
   }

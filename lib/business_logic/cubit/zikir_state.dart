@@ -11,7 +11,7 @@ final class ZikirLoaded extends ZikirState {
   final List<ZikirCategory> azkarList;
   ZikirLoaded(this.azkarList);
 
-  List<Object?> get props => [azkarList];
+  // List<Object?> get props => [azkarList];
 }
 
 class ZikirError extends ZikirState {

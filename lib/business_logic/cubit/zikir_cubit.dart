@@ -15,7 +15,6 @@ class ZikirCubit extends Cubit<ZikirState> {
       final azkar = await zikirRepository.getAllAzkar();
       emit(ZikirLoaded(azkar)); // إرسال الأذكار للواجهة
     } catch (e) {
-      print('----------------------------------- $e');
       emit(ZikirError(e.toString()));
     }
   }

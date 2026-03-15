@@ -8,10 +8,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('أذكاري'), // يفضل استخدام خط عربي
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: Text('أذكاري'), centerTitle: true),
+
       body: BlocBuilder<ZikirCubit, ZikirState>(
         builder: (context, state) {
           if (state is ZikirLoading) {
@@ -25,11 +23,13 @@ class HomeScreen extends StatelessWidget {
                 return Card(
                   elevation: 4,
                   margin: EdgeInsets.only(bottom: 12),
+
                   child: ListTile(
                     contentPadding: EdgeInsets.symmetric(
                       horizontal: 20,
                       vertical: 10,
                     ),
+
                     title: Text(
                       category.category,
                       style: TextStyle(
