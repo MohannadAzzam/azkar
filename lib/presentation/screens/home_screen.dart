@@ -1,3 +1,6 @@
+import 'package:azkar/constants/strings.dart';
+import 'package:azkar/data/models/zikir_category.dart';
+
 import '../../business_logic/cubit/zikir_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,7 +29,7 @@ class HomeScreen extends StatelessWidget {
 
                   child: ListTile(
                     contentPadding: EdgeInsets.symmetric(
-                      horizontal: 20, 
+                      horizontal: 20,
                       vertical: 10,
                     ),
 
@@ -39,7 +42,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     trailing: Icon(Icons.arrow_forward_ios, size: 18),
                     onTap: () {
-                      // سنقوم هنا بالانتقال لصفحة التفاصيل لاحقاً
+                      Navigator.pushNamed(context, azkar, arguments: category);
                     },
                   ),
                 );

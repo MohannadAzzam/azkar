@@ -1,5 +1,7 @@
 import 'package:azkar/business_logic/cubit/zikir_cubit.dart';
+import 'package:azkar/data/models/zikir_category.dart';
 import 'package:azkar/data/repo/zikir_repository.dart';
+import 'package:azkar/presentation/screens/azkar_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'constants/strings.dart';
@@ -16,6 +18,9 @@ class AppRouter {
             child: HomeScreen(),
           ),
         );
+      case azkar:
+        final azkar = settings.arguments as ZikirCategory;
+        return MaterialPageRoute(builder: (_) => AzkarScreen(zikirCategory: azkar,));
     }
     return null;
   }
