@@ -34,13 +34,15 @@ class HomeScreen extends StatelessWidget {
                     ),
 
                     title: Text(
+                      textAlign: TextAlign.end,
+
                       category.category,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    trailing: Icon(Icons.arrow_forward_ios, size: 18),
+                    leading: Icon(Icons.arrow_back_ios, size: 18),
                     onTap: () {
                       Navigator.pushNamed(context, azkar, arguments: category);
                     },
