@@ -46,7 +46,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
                 color: Colors.teal,
               ),
             ),
-            const SizedBox(height: 40),
+            SizedBox(height: 40),
 
             // تصميم زر التسبيح الكبير
             GestureDetector(

@@ -55,42 +55,42 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProgressSection() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Row(
-        children: [
-          const Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "إنجازك اليوم",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 5),
-                Text(
-                  "قرأت 5 من أصل 12 ذكر",
-                  style: TextStyle(fontSize: 12, color: Colors.grey),
-                ),
-              ],
-            ),
-          ),
-          CircularProgressIndicator(
-            value: 0.5,
-            strokeWidth: 5,
-            backgroundColor: Colors.grey.shade200,
-            color: Colors.orange,
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildProgressSection() {
+  //   return Container(
+  //     margin: const EdgeInsets.symmetric(horizontal: 16),
+  //     padding: const EdgeInsets.all(15),
+  //     decoration: BoxDecoration(
+  //       color: Colors.white,
+  //       borderRadius: BorderRadius.circular(15),
+  //     ),
+  //     child: Row(
+  //       children: [
+  //         const Expanded(
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               Text(
+  //                 "إنجازك اليوم",
+  //                 style: TextStyle(fontWeight: FontWeight.bold),
+  //               ),
+  //               SizedBox(height: 5),
+  //               Text(
+  //                 "قرأت 5 من أصل 12 ذكر",
+  //                 style: TextStyle(fontSize: 12, color: Colors.grey),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //         CircularProgressIndicator(
+  //           value: 0.5,
+  //           strokeWidth: 5,
+  //           backgroundColor: Colors.grey.shade200,
+  //           color: Colors.orange,
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   // ... (تكملة الـ Grid والـ QuickAccess كما في المثال السابق)
 }

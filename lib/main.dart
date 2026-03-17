@@ -1,10 +1,12 @@
-
+import 'package:flutter/rendering.dart';
 
 import 'app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
+  debugRepaintRainbowEnabled = true;
+
   runApp(
     // BlocProvider(
     // create: (context) => ZikirCubit(ZikirRepository()..getAllAzkar()),
@@ -73,7 +75,6 @@ class AppTheme {
         foregroundColor: Colors.white,
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
-
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.teal,
         unselectedItemColor: Colors.grey,
