@@ -8,30 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
-
-  String getGreatings() {
-    var hour = DateTime.now().hour;
-    if (hour < 12) {
-      return "صباح الخير، لا تنسَ أذكار الصباح";
-    }
-    if (hour < 17) {
-      return "طاب يومك بذكر الله";
-    }
-    return "مساء الخير، هل قرأت أذكار المساء؟";
-  }
-
-  List<String> ayat = [
-    "فَاذْكُرُونِي أَذْكُرْكُمْ",
-    "أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ",
-    "وَاسْتَغْفِرُوا رَبَّكُمْ ثُمَّ تُوبُوا إِلَيْهِ",
-  ];
-
-  String todayAya() {
-    Random random = Random();
-    var selectedAya = random.nextInt(ayat.length);
-    return ayat[selectedAya];
-  }
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -355,3 +332,28 @@ Widget quickCard(String title, IconData icon, Color color) {
     ),
   );
 }
+
+
+
+  String getGreatings() {
+    var hour = DateTime.now().hour;
+    if (hour < 12) {
+      return "صباح الخير، لا تنسَ أذكار الصباح";
+    }
+    if (hour < 17) {
+      return "طاب يومك بذكر الله";
+    }
+    return "مساء الخير، هل قرأت أذكار المساء؟";
+  }
+
+  List<String> ayat = [
+    "فَاذْكُرُونِي أَذْكُرْكُمْ",
+    "أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ",
+    "وَاسْتَغْفِرُوا رَبَّكُمْ ثُمَّ تُوبُوا إِلَيْهِ",
+  ];
+
+  String todayAya() {
+    Random random = Random();
+    var selectedAya = random.nextInt(ayat.length);
+    return ayat[selectedAya];
+  }
