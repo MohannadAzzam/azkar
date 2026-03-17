@@ -19,7 +19,6 @@ class ZikirCategory {
     );
   }
 
-  Object? operator [](String other) {}
 }
 
 class ZikirItem {

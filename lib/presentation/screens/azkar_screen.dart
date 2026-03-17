@@ -10,7 +10,10 @@ class AzkarScreen extends StatelessWidget {
     bool isFavorite = false;
 
     return Scaffold(
-      appBar: AppBar(title: Text(zikirCategory.category)),
+      appBar: AppBar(
+        // backgroundColor: Colors.teal,
+        title: Text(zikirCategory.category),
+      ),
       body: ListView.builder(
         physics: BouncingScrollPhysics(),
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
