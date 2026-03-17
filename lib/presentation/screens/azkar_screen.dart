@@ -1,4 +1,4 @@
-import 'package:azkar/data/models/zikir_category.dart';
+import '../../data/models/zikir_category.dart';
 import 'package:flutter/material.dart';
 
 class AzkarScreen extends StatelessWidget {

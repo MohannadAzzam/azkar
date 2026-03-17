@@ -1,6 +1,5 @@
-import 'package:azkar/constants/strings.dart';
-import 'package:azkar/presentation/screens/home_screen.dart';
-import 'package:azkar/presentation/screens/tasbug_screen.dart';
+import '../../constants/strings.dart';
+import 'home_screen.dart';
 import 'package:flutter/material.dart';
 
 class MainScaffold extends StatefulWidget {

@@ -1,7 +1,4 @@
-import 'package:azkar/business_logic/zikir_cubit/zikir_cubit.dart';
-import 'package:azkar/data/repo/zikir_repository.dart';
-import 'package:azkar/presentation/screens/main_scaffold.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 
 import 'app_router.dart';
 import 'package:flutter/material.dart';

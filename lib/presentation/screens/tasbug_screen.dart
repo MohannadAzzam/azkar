@@ -46,7 +46,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
                 height: 200,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.teal.withOpacity(0.1),
+                  color: Colors.teal.withValues( alpha: 0.1),
                   border: Border.all(color: Colors.teal, width: 5),
                 ),
                 child: Center(

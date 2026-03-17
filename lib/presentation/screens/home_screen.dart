@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:azkar/constants/strings.dart';
-import 'package:azkar/data/models/zikir_category.dart';
+import '../../constants/strings.dart';
+import '../../data/models/zikir_category.dart';
 
 import '../../business_logic/zikir_cubit/zikir_cubit.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +45,7 @@ class HomeScreen extends StatelessWidget {
           pinned: true,
           flexibleSpace: FlexibleSpaceBar(
             title: Text(
-              "${getGreatings()}",
+              getGreatings(),
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -104,7 +104,7 @@ class HomeScreen extends StatelessWidget {
           const Icon(Icons.auto_awesome, color: Colors.white70, size: 24),
           const SizedBox(height: 10),
           Text(
-            '${todayAya()}',
+            todayAya(),
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: Colors.white,

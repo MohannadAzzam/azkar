@@ -1,9 +1,9 @@
-import 'package:azkar/business_logic/zikir_cubit/zikir_cubit.dart';
-import 'package:azkar/data/models/zikir_category.dart';
-import 'package:azkar/data/repo/zikir_repository.dart';
-import 'package:azkar/presentation/screens/azkar_screen.dart';
-import 'package:azkar/presentation/screens/main_scaffold.dart';
-import 'package:azkar/presentation/screens/tasbug_screen.dart';
+import 'business_logic/zikir_cubit/zikir_cubit.dart';
+import 'data/models/zikir_category.dart';
+import 'data/repo/zikir_repository.dart';
+import 'presentation/screens/azkar_screen.dart';
+import 'presentation/screens/main_scaffold.dart';
+import 'presentation/screens/tasbug_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'constants/strings.dart';
