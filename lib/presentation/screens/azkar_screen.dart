@@ -11,7 +11,6 @@ class AzkarScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        // backgroundColor: Colors.teal,
         title: Text(zikirCategory.category),
       ),
       body: ListView.builder(
@@ -23,7 +22,6 @@ class AzkarScreen extends StatelessWidget {
           return Card(
             elevation: 4,
             margin: EdgeInsets.only(bottom: 12),
-
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [

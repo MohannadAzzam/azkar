@@ -10,10 +10,10 @@ class ZikirCubit extends Cubit<ZikirState> {
   ZikirCubit(this.zikirRepository) : super(ZikirInitial());
 
   void loadAzkar() async {
-    emit(ZikirLoading()); // عرض مؤشر تحميل
+    emit(ZikirLoading()); 
     try {
       final azkar = await zikirRepository.getAllAzkar();
-      emit(ZikirLoaded(azkar)); // إرسال الأذكار للواجهة
+      emit(ZikirLoaded(azkar)); 
     } catch (e) {
       emit(ZikirError(e.toString()));
     }

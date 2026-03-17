@@ -10,12 +10,9 @@ final class ZikirLoading extends ZikirState {}
 final class ZikirLoaded extends ZikirState {
   final List<ZikirCategory> azkarList;
   ZikirLoaded(this.azkarList);
-
-  // List<Object?> get props => [azkarList];
 }
 
 class ZikirError extends ZikirState {
   final String message;
-
   ZikirError(this.message);
 }

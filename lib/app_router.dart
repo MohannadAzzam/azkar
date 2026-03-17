@@ -1,14 +1,14 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'business_logic/zikir_cubit/zikir_cubit.dart';
+import 'constants/strings.dart';
 import 'data/models/zikir_category.dart';
 import 'data/repo/zikir_repository.dart';
 import 'presentation/screens/azkar_screen.dart';
-import 'presentation/screens/main_scaffold.dart';
-import 'presentation/screens/tasbug_screen.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'constants/strings.dart';
 import 'presentation/screens/home_screen.dart';
-import 'package:flutter/material.dart';
+import 'presentation/screens/main_scaffold.dart';
+import 'presentation/screens/tasbih_screen.dart';
 
 class AppRouter {
   Route? generateRoute(RouteSettings settings) {
