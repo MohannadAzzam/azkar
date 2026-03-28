@@ -45,7 +45,7 @@ class HomeScreen extends StatelessWidget {
 
               // _buildQuickAccess(),
               const SectionTitle(title: 'التصنيفات'),
-              buildCategoriesGrid(),
+              buildCategoriesGrid(context),
 
               const SizedBox(height: 80), // مساحة للـ FAB
             ],

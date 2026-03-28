@@ -20,16 +20,17 @@ class ZikirCategory {
   }
 
 }
-
 class ZikirItem {
   final String text;
-  final int count;
+  final int count; // الهدف الثابت (مثلاً 3)
   final String description;
+  int currentCounter = 0; // العداد الحالي الذي سيتغير بالضغط
 
   ZikirItem({
     required this.text,
     required this.count,
     required this.description,
+    this.currentCounter = 0, // يبدأ من الصفر
   });
 
   factory ZikirItem.fromJson(Map<String, dynamic> json) {

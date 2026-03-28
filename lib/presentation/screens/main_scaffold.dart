@@ -1,3 +1,7 @@
+import 'package:azkar/business_logic/theme_cubit/theme_cubit.dart';
+import 'package:azkar/presentation/screens/settings_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../constants/strings.dart';
 import 'home_screen.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +20,8 @@ class _MainScaffoldState extends State<MainScaffold> {
     HomeScreen(),
     Center(child: Text('المفضلة')),
     Center(child: Text('البحث')),
-    Center(child: Text('الإعدادات')),
+    BlocProvider(create: (context) => ThemeCubit(), child: SettingsScreen()),
+    // Center(child: Text('الإعدادات')),
   ];
 
   @override

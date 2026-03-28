@@ -8,50 +8,58 @@ Widget buildQuickAccess() {
   return BlocBuilder<ZikirCubit, ZikirState>(
     builder: (context, state) {
       if (state is ZikirLoading) {
-        return Center(child: CircularProgressIndicator());
-      } else if (state is ZikirLoaded) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      if (state is ZikirLoaded) {
+        // نقوم بفلترة الأذكار الأساسية فقط لتعرض في القائمة العلوية
+        final quickAzkar = state.azkarList
+            .where(
+              (element) =>
+                  element.category == "أذكار الصباح" ||
+                  element.category == "أذكار المساء" ||
+                  element.category == "أذكار النوم",
+            )
+            .toList();
+
         return SizedBox(
-          height: 120,
+          height: 150, // زدنا الطول قليلاً ليناسب التصميم الجديد
           child: ListView.builder(
-            itemCount: state.azkarList.length,
+            itemCount: quickAzkar.length,
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             itemBuilder: (context, index) {
-              if (state.azkarList[index].category == "أذكار الصباح") {
-                return _quickCard(
-                  state.azkarList[index].category,
-                  Icons.wb_sunny,
-                  Colors.orange,
-                  context,
-                  zikirCategory: state.azkarList[index],
-                );
-              }
-              if (state.azkarList[index].category == "أذكار المساء") {
-                return _quickCard(
-                  state.azkarList[index].category,
-                  Icons.nightlight_round,
-                  Colors.indigo,
-                  context,
-                  zikirCategory: state.azkarList[index],
-                );
-              }
-              if (state.azkarList[index].category == "أذكار النوم") {
-                return _quickCard(
-                  state.azkarList[index].category,
-                  Icons.bedtime,
-                  Colors.purple,
-                  context,
-                  zikirCategory: state.azkarList[index],
-                );
+              final item = quickAzkar[index];
+
+              // نحدد الأيقونة واللون بناءً على اسم القسم
+              IconData icon;
+              Color color;
+
+              if (item.category == "أذكار الصباح") {
+                icon = Icons.wb_sunny_rounded;
+                color = const Color(0xFFFFA726); // برتقالي دافئ
+              } else if (item.category == "أذكار المساء") {
+                icon = Icons.nightlight_round;
+                color = const Color(0xFF5C6BC0); // أزرق ليلي
               } else {
-                return Container(color: Colors.red, height: 20, width: 20);
+                icon = Icons.bedtime_rounded;
+                color = const Color(0xFF7E57C2); // بنفسجي هادئ
               }
+
+              // هنا نستدعي الـ Widget الجميل الذي صممناه
+              return _quickCard(
+                item.category,
+                icon,
+                color,
+                context,
+                zikirCategory: item,
+              );
             },
           ),
         );
-      } else {
-        return Center(child: Text('حدث خطأ أثناء تحميل الأذكار'));
       }
+
+      return const SizedBox(); // في حال فشل التحميل لا يظهر شيء مزعج
     },
   );
 }

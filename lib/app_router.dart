@@ -1,3 +1,6 @@
+import 'package:azkar/business_logic/zikir_by_category/cubit/zikir_by_category_cubit.dart';
+import 'package:azkar/data/repo/zikir_by_category.dart';
+import 'package:azkar/presentation/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,12 +24,23 @@ class AppRouter {
           ),
         );
       case homeScreen:
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) => ZikirCubit(ZikirRepository())..loadAzkar(),
-            child: HomeScreen(),
-          ),
-        );
+  return MaterialPageRoute(
+    builder: (_) => MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ZikirCubit(ZikirRepository())..loadAzkar(),
+        ),
+        BlocProvider(
+          create: (context) => ZikirByCategoryCubit(ZikirByCategoryRepository())
+            ..loadZikirByCategory(),
+        ),
+      ],
+      // استخدمنا Builder هنا للتأكد من تمرير Context نظيف ومشبع بالـ Providers
+      child: Builder(
+        builder: (context) => const HomeScreen(),
+      ),
+    ),
+  );
       case azkarScreen:
         final azkar = settings.arguments as ZikirCategory;
         return MaterialPageRoute(
@@ -34,6 +48,15 @@ class AppRouter {
         );
       case tasbihScreen:
         return MaterialPageRoute(builder: (_) => TasbihScreen());
+      case settingsScreen:
+        return MaterialPageRoute(
+          builder: (_) =>
+              //  BlocProvider(
+              // create: (context) => ThemeCubit(),
+              // child:
+              SettingsScreen(),
+          // ),
+        );
     }
 
     return null;
