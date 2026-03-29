@@ -6,7 +6,6 @@
 import 'package:azkar/business_logic/theme_cubit/theme_cubit.dart';
 import 'package:azkar/business_logic/zikir_by_category/cubit/zikir_by_category_cubit.dart';
 import 'package:azkar/data/repo/zikir_by_category.dart';
-import 'package:azkar/presentation/screens/main_scaffold.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 

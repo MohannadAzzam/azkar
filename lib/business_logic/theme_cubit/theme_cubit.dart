@@ -14,11 +14,11 @@ class ThemeCubit extends Cubit<ThemeMode> {
     final newState = state == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
     print('تغيير الثيم إلى: $newState');
     // final prefs = await SharedPreferences.getInstance();
-    if (state != ThemeMode.light) {
-      emit(ThemeMode.light);
+    if (state == ThemeMode.dark) {
+      emit(ThemeMode.dark);
       // await prefs.setBool(_themeKey, true); // حفظ الحالة (مظلم)
     } else {
-      emit(ThemeMode.dark);
+      emit(ThemeMode.light);
       // await prefs.setBool(_themeKey, false); // حفظ الحالة (فاتح)
     }
   }

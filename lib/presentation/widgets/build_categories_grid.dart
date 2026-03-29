@@ -73,10 +73,10 @@ final List<CategoryItem> categoryUI = [
                 decoration: BoxDecoration(
                   color: uiItem.color,
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: uiItem.color.withOpacity(0.5), width: 1),
+                  border: Border.all(color: uiItem.color.withValues(alpha:  0.5), width: 1),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.03),
+                      color: Colors.black.withValues(alpha:0.03),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -88,13 +88,13 @@ final List<CategoryItem> categoryUI = [
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.6),
+                        color: Colors.white.withValues(alpha:0.6),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
                         uiItem.icon,
                         size: 36,
-                        color: Colors.black87.withOpacity(0.7),
+                        color: Colors.black87.withValues(alpha:0.7),
                       ),
                     ),
                     const SizedBox(height: 16),
