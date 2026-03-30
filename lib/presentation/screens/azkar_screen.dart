@@ -10,9 +10,7 @@ class AzkarScreen extends StatelessWidget {
     bool isFavorite = false;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(zikirCategory.category),
-      ),
+      appBar: AppBar(title: Text(zikirCategory.category)),
       body: ListView.builder(
         physics: BouncingScrollPhysics(),
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -31,7 +29,6 @@ class AzkarScreen extends StatelessWidget {
                     vertical: 10,
                   ),
                   title: Text(
-                    textAlign: TextAlign.end,
                     details.text,
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
@@ -39,7 +36,6 @@ class AzkarScreen extends StatelessWidget {
                       ? SizedBox()
                       : Text(
                           details.description,
-                          textAlign: TextAlign.end,
                           style: TextStyle(fontSize: 16),
                         ),
                 ),
@@ -47,7 +43,7 @@ class AzkarScreen extends StatelessWidget {
                   padding: EdgeInsets.only(bottom: 8, left: 16, right: 16),
                   child: InkWell(
                     onTap: () {
-                      isFavorite != isFavorite;
+                      isFavorite = !isFavorite;
                     },
                     child: isFavorite == false
                         ? Icon(Icons.favorite_border_outlined)

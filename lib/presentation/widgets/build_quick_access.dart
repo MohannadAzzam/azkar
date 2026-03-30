@@ -79,7 +79,8 @@ Widget _quickCard(
       width: 140,
       margin: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: Colors.white,
+        // color: Colors.white,
+        border: BoxBorder.all(color: Colors.grey),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
       ),

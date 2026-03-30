@@ -1,3 +1,4 @@
+import 'package:azkar/business_logic/theme_cubit/theme_cubit.dart';
 import 'package:azkar/business_logic/zikir_by_category/cubit/zikir_by_category_cubit.dart';
 import 'package:azkar/data/repo/zikir_by_category.dart';
 import 'package:azkar/presentation/screens/settings_screen.dart';
@@ -24,23 +25,22 @@ class AppRouter {
           ),
         );
       case homeScreen:
-  return MaterialPageRoute(
-    builder: (_) => MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => ZikirCubit(ZikirRepository())..loadAzkar(),
-        ),
-        BlocProvider(
-          create: (context) => ZikirByCategoryCubit(ZikirByCategoryRepository())
-            ..loadZikirByCategory(),
-        ),
-      ],
-      // استخدمنا Builder هنا للتأكد من تمرير Context نظيف ومشبع بالـ Providers
-      child: Builder(
-        builder: (context) => const HomeScreen(),
-      ),
-    ),
-  );
+        return MaterialPageRoute(
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => ZikirCubit(ZikirRepository())..loadAzkar(),
+              ),
+              BlocProvider(
+                create: (context) =>
+                    ZikirByCategoryCubit(ZikirByCategoryRepository())
+                      ..loadZikirByCategory(),
+              ),
+            ],
+            // استخدمنا Builder هنا للتأكد من تمرير Context نظيف ومشبع بالـ Providers
+            child: Builder(builder: (context) => const HomeScreen()),
+          ),
+        );
       case azkarScreen:
         final azkar = settings.arguments as ZikirCategory;
         return MaterialPageRoute(
@@ -49,14 +49,7 @@ class AppRouter {
       case tasbihScreen:
         return MaterialPageRoute(builder: (_) => TasbihScreen());
       case settingsScreen:
-        return MaterialPageRoute(
-          builder: (_) =>
-              //  BlocProvider(
-              // create: (context) => ThemeCubit(),
-              // child:
-              SettingsScreen(),
-          // ),
-        );
+        return MaterialPageRoute(builder: (_) => SettingsScreen());
     }
 
     return null;

@@ -1,16 +1,12 @@
 // import 'package:flutter/rendering.dart';
 
-// import 'package:azkar/business_logic/theme_cubit/theme_cubit.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:azkar/app_router.dart';
 import 'package:azkar/business_logic/theme_cubit/theme_cubit.dart';
 import 'package:azkar/business_logic/zikir_by_category/cubit/zikir_by_category_cubit.dart';
 import 'package:azkar/data/repo/zikir_by_category.dart';
+import 'package:flutter/material.dart'; 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
-import 'app_router.dart';
-import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
@@ -36,10 +32,10 @@ class AzkarApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // نستخدم BlocBuilder للاستماع لتغيير الثيم
     return BlocBuilder<ThemeCubit, ThemeMode>(
-      builder: (context, themestate) {
+      builder: (context, state) {
         return MaterialApp(
+          key: ValueKey(state),
           debugShowCheckedModeBanner: false,
           title: 'تطبيق الأذكار',
           locale: Locale('ar', 'DZ'),
@@ -50,11 +46,10 @@ class AzkarApp extends StatelessWidget {
           ],
           supportedLocales: const [Locale('ar', 'DZ')],
           // home: const MainScaffold(),
-          // ربط الثيمات المطورة
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
-          themeMode: themestate, // الحالة القادمة من الـ Cubit
-
+          themeMode: state,
+          // initialRoute: mainScaffold,
           onGenerateRoute: appRouter.generateRoute,
         );
       },
@@ -72,7 +67,7 @@ class AppTheme {
   // --- ثيم الوضع الداكن ---
   static ThemeData get darkTheme {
     return ThemeData(
-      useMaterial3: true,
+      // useMaterial3: true,
       brightness: Brightness.dark,
       primaryColor: primaryTeal,
       scaffoldBackgroundColor: darkBg,
