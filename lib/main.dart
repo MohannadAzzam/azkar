@@ -9,8 +9,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-void main() {
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // await initializeDateFormatting('ar', "");
   // debugRepaintRainbowEnabled = true;
+  WidgetsFlutterBinding.ensureInitialized();
+  // await NotificationService.init();
   runApp(
     MultiBlocProvider(
       providers: [

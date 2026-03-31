@@ -1,6 +1,7 @@
 import 'package:azkar/business_logic/prayer_time_cubit/prayer_time_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class PrayerTimesScreen extends StatelessWidget {
   const PrayerTimesScreen({super.key});
@@ -35,7 +36,7 @@ class PrayerTimesScreen extends StatelessWidget {
                 ),
               );
             } else if (state is PrayerTimeLoaded) {
-                // print(DateFormat.jm().format(prayerTimes.fajr));
+              // print(DateFormat.jm().format(prayerTimes.fajr));
 
               final times = state.prayerTimes;
               times.nextPrayerByDateTime;
@@ -43,7 +44,6 @@ class PrayerTimesScreen extends StatelessWidget {
               // يمكنك استخدام state.prayerTimes و state.locationName لعرض البيانات الحقيقية
               return Column(
                 children: [
-
                   // الجزء العلوي: الصلاة القادمة (Hero Section)
                   _buildNextPrayerHeader(primaryColor),
                   // _prayerTile("الفجر", times.fajr, Icons, iconColor, isCurrent)
@@ -56,7 +56,7 @@ class PrayerTimesScreen extends StatelessWidget {
                       children: [
                         _prayerTile(
                           "الفجر",
-                          "${times.fajr.toString().substring(11, 16)} AM",
+                          DateFormat('hh:mm a').format(times.fajr),
                           Icons.wb_twilight,
                           Colors.blue.shade300,
                           false,
