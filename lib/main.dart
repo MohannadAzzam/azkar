@@ -6,16 +6,27 @@ import 'package:azkar/business_logic/zikir_by_category_cubit/zikir_by_category_c
 import 'package:azkar/data/repo/zikir_by_category.dart';
 import 'package:flutter/material.dart'; 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
   // await initializeDateFormatting('ar', "");
   // debugRepaintRainbowEnabled = true;
+
   WidgetsFlutterBinding.ensureInitialized();
-  // await NotificationService.init();
+// إعدادات أندرويد (أيقونة التطبيق)
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  const InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+  );
+
+  await flutterLocalNotificationsPlugin.initialize(settings: initializationSettings);
   runApp(
     MultiBlocProvider(
       providers: [

@@ -32,8 +32,8 @@ class PrayerTimeCubit extends Cubit<PrayerTimeState> {
         ),
       );
 
-      final coordinates = Coordinates(position.latitude, position.longitude);
-      final params = CalculationMethod.karachi.getParameters();
+      final coordinates = Coordinates(31.5, 34.4);
+      final params = CalculationMethod.muslim_world_league.getParameters();
       params.madhab = Madhab.shafi; // يمكنك اختيار المذهب حسب الحاجة
 
       final prayerTimes = PrayerTimes.today(coordinates, params);
