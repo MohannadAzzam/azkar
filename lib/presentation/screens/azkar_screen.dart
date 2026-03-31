@@ -32,7 +32,7 @@ class AzkarScreen extends StatelessWidget {
                     details.text,
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  subtitle: details.description == ""
+                  subtitle: details.description.trim() == ""
                       ? SizedBox()
                       : Text(
                           details.description,

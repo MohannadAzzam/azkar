@@ -1,0 +1,15 @@
+flutter_native_splash:
+  # الإعدادات العامة (iOS وأندرويد القديم والويب)
+  color: "#f8f9fa"
+  image: assets/images/splash_screen.png
+  color_dark: "#121212"
+  image_dark: assets/images/splash_screen.png
+  
+  fullscreen: true
+
+  # إعدادات أندرويد 12 فما فوق (إلزامي لأن نظامه مختلف)
+  android_12:
+    color: "#f8f9fa"
+    image: assets/images/splash_screen.png
+    color_dark: "#121212" # تم تعديله ليناسب الوضع الليلي
+    image_dark: assets/images/splash_screen.png

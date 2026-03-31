@@ -9,7 +9,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // تعريف ألوان ثابتة للتناسق
     final Color primaryColor = Colors.teal.shade700;
     final Color backgroundColor = Colors.grey.shade50;
 
@@ -72,8 +71,7 @@ class HomeScreen extends StatelessWidget {
                   buildDailyQuote(todayAya: todayAya()),
 
                   // قسم الإنجاز (تفعيل وإصلاح التصميم)
-                  _buildProgressSection(primaryColor),
-
+                  // _buildProgressSection(primaryColor),
                   const SectionTitle(title: 'أذكار أساسية'),
                   // تأكد أن buildQuickAccess يعيد Row أو ListView.horizontal
                   SizedBox(height: 110, child: buildQuickAccess()),
