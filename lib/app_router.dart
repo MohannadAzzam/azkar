@@ -1,6 +1,6 @@
-import 'package:azkar/business_logic/theme_cubit/theme_cubit.dart';
-import 'package:azkar/business_logic/zikir_by_category/cubit/zikir_by_category_cubit.dart';
+import 'package:azkar/business_logic/zikir_by_category_cubit/zikir_by_category_cubit.dart';
 import 'package:azkar/data/repo/zikir_by_category.dart';
+import 'package:azkar/presentation/screens/prayer_time_screen.dart';
 import 'package:azkar/presentation/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,6 +50,9 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => TasbihScreen());
       case settingsScreen:
         return MaterialPageRoute(builder: (_) => SettingsScreen());
+
+        case prayerTimesScreen:
+        return MaterialPageRoute(builder: (_) => PrayerTimesScreen());
     }
 
     return null;

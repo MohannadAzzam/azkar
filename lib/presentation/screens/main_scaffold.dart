@@ -1,4 +1,5 @@
 import 'package:azkar/business_logic/theme_cubit/theme_cubit.dart';
+import 'package:azkar/presentation/screens/prayer_time_screen.dart';
 import 'package:azkar/presentation/screens/settings_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,7 +20,7 @@ class _MainScaffoldState extends State<MainScaffold> {
   final List<Widget> _pages = [
     HomeScreen(),
     Center(child: Text('المفضلة')),
-    Center(child: Text('البحث')),
+    PrayerTimesScreen(),
     BlocProvider(create: (context) => ThemeCubit(), child: SettingsScreen()),
     // Center(child: Text('الإعدادات')),
   ];
@@ -46,7 +47,10 @@ class _MainScaffoldState extends State<MainScaffold> {
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'الرئيسية'),
           BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'المفضلة'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'البحث'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.mosque),
+            label: 'مواقيت الصلاة',
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: 'الإعدادات',

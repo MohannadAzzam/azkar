@@ -90,67 +90,67 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // تصميم محسن لبطاقة الإنجاز
-  Widget _buildProgressSection(Color color) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(Icons.auto_graph, color: color),
-          ),
-          const SizedBox(width: 15),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "إنجازك اليوم",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                Text(
-                  "قرأت 5 من أصل 12 ذكر",
-                  style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
-                ),
-              ],
-            ),
-          ),
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              CircularProgressIndicator(
-                value: 0.4,
-                strokeWidth: 6,
-                backgroundColor: Colors.grey.shade100,
-                color: Colors.orangeAccent,
-              ),
-              const Text(
-                "40%",
-                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+  // // تصميم محسن لبطاقة الإنجاز
+  // Widget _buildProgressSection(Color color) {
+  //   return Container(
+  //     margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+  //     padding: const EdgeInsets.all(20),
+  //     decoration: BoxDecoration(
+  //       color: Colors.white,
+  //       borderRadius: BorderRadius.circular(20),
+  //       boxShadow: [
+  //         BoxShadow(
+  //           color: Colors.black.withValues(alpha: 0.05),
+  //           blurRadius: 15,
+  //           offset: const Offset(0, 5),
+  //         ),
+  //       ],
+  //     ),
+  //     child: Row(
+  //       children: [
+  //         Container(
+  //           padding: const EdgeInsets.all(10),
+  //           decoration: BoxDecoration(
+  //             color: color.withValues(alpha: 0.1),
+  //             shape: BoxShape.circle,
+  //           ),
+  //           child: Icon(Icons.auto_graph, color: color),
+  //         ),
+  //         const SizedBox(width: 15),
+  //         Expanded(
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               const Text(
+  //                 "إنجازك اليوم",
+  //                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+  //               ),
+  //               Text(
+  //                 "قرأت 5 من أصل 12 ذكر",
+  //                 style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //         Stack(
+  //           alignment: Alignment.center,
+  //           children: [
+  //             CircularProgressIndicator(
+  //               value: 0.4,
+  //               strokeWidth: 6,
+  //               backgroundColor: Colors.grey.shade100,
+  //               color: Colors.orangeAccent,
+  //             ),
+  //             const Text(
+  //               "40%",
+  //               style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+  //             ),
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
 
 class SectionTitle extends StatelessWidget {

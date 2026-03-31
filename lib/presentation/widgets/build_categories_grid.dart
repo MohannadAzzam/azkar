@@ -1,4 +1,4 @@
-import 'package:azkar/business_logic/zikir_by_category/cubit/zikir_by_category_cubit.dart';
+import 'package:azkar/business_logic/zikir_by_category_cubit/zikir_by_category_cubit.dart';
 import 'package:azkar/constants/strings.dart';
 import 'package:azkar/data/models/zikir_category.dart';
 import 'package:flutter/material.dart';
