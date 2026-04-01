@@ -1,7 +1,6 @@
 import 'package:adhan/adhan.dart';
 import 'package:azkar/data/repo/prayer_repository.dart';
 import 'package:bloc/bloc.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:meta/meta.dart';
 
 part 'prayer_time_state.dart';
