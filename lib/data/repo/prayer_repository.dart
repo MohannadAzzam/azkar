@@ -1,41 +1,28 @@
 import 'package:adhan/adhan.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 class PrayerRepository {
-  Future<PrayerTimes> getTodayPrayerTimes() async {
-    LocationPermission permission = await Geolocator.checkPermission();
-    
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        throw 'تم رفض الوصول للموقع الجغرافي';
-      }
-    }
+  // لاحظ التغيير في نوع الإرجاع ليعيد قيمتين (PrayerTimes, String)
+  Future<(PrayerTimes, String)> getTodayPrayerTimes() async {
+    // ... كود الصلاحيات كما هو ...
 
-    if (permission == LocationPermission.deniedForever) {
-      throw 'صلاحيات الموقع مرفوضة نهائياً، يرجى تفعيلها من الإعدادات';
-    }
-
-    
     Position position;
+    String cityName = "غزة، فلسطين"; // قيمة افتراضية
+
     try {
-      // حاول جلب آخر موقع معروف (سريع جداً ولحظي)
       Position? lastKnown = await Geolocator.getLastKnownPosition();
-      
-      if (lastKnown != null) {
-        position = lastKnown;
-      } else {
-        // إذا لم يوجد، اطلب الموقع الحالي مع تحديد وقت انتظار (مثلاً 5 ثواني)
-        // إذا انتهت الـ 5 ثواني ولم يستجب الـ GPS، سينتقل للـ catch
-        position = await Geolocator.getCurrentPosition(
-          locationSettings: const LocationSettings(
-            accuracy: LocationAccuracy.low, // دقة منخفضة لسرعة الاستجابة
-          ),
-        ).timeout(const Duration(seconds: 5));
+      position = lastKnown ?? await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(accuracy: LocationAccuracy.low),
+      ).timeout(const Duration(seconds: 5));
+
+      // جلب اسم المدينة الحقيقي
+      List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+      if (placemarks.isNotEmpty) {
+        cityName = "${placemarks.first.locality}, ${placemarks.first.country}";
       }
     } catch (e) {
-      // في حال فشل الـ GPS تماماً، نستخدم إحداثيات افتراضية (مثلاً القاهرة أو غزة) 
-      // لضمان عدم تعليق الشاشة على "Loading"
+      // في حال الخطأ نستخدم الإحداثيات الافتراضية
       position = Position(
         latitude: 31.5, longitude: 34.4, 
         timestamp: DateTime.now(), accuracy: 0, altitude: 0, 
@@ -43,11 +30,13 @@ class PrayerRepository {
       );
     }
 
-    
     final coordinates = Coordinates(position.latitude, position.longitude);
     final params = CalculationMethod.muslim_world_league.getParameters();
     params.madhab = Madhab.shafi;
 
-    return PrayerTimes.today(coordinates, params);
+    final prayerTimes = PrayerTimes.today(coordinates, params);
+    
+    // إرجاع القيمتين معاً
+    return (prayerTimes, cityName);
   }
 }

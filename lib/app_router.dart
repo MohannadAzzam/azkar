@@ -59,11 +59,7 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => SettingsScreen());
       case prayerTimesScreen:
         return MaterialPageRoute(
-          builder: (_) => BlocProvider.value(
-            // استخدم .value إذا كان الـ Cubit موجوداً مسبقاً
-            value: _prayerTimeCubit, // استخدام Service Locator (GetIt)
-            child: const PrayerTimesScreen(),
-          ),
+          builder: (_) => const PrayerTimesScreen(),
         );
     }
 
