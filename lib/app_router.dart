@@ -1,4 +1,6 @@
+import 'package:azkar/business_logic/prayer_time_cubit/prayer_time_cubit.dart';
 import 'package:azkar/business_logic/zikir_by_category_cubit/zikir_by_category_cubit.dart';
+import 'package:azkar/data/repo/prayer_repository.dart';
 import 'package:azkar/data/repo/zikir_by_category.dart';
 import 'package:azkar/presentation/screens/prayer_time_screen.dart';
 import 'package:azkar/presentation/screens/settings_screen.dart';
@@ -15,7 +17,12 @@ import 'presentation/screens/main_scaffold.dart';
 import 'presentation/screens/tasbih_screen.dart';
 
 class AppRouter {
-  Route? generateRoute(RouteSettings settings) {
+  static final _prayerRepository = PrayerRepository();
+  static final _prayerTimeCubit = PrayerTimeCubit(_prayerRepository)..fetchPrayerTimes();
+
+  static Route? generateRoute(RouteSettings settings) {
+    
+  
     switch (settings.name) {
       case mainScaffold:
         return MaterialPageRoute(
@@ -50,9 +57,14 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => TasbihScreen());
       case settingsScreen:
         return MaterialPageRoute(builder: (_) => SettingsScreen());
-
-        case prayerTimesScreen:
-        return MaterialPageRoute(builder: (_) => PrayerTimesScreen());
+      case prayerTimesScreen:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider.value(
+            // استخدم .value إذا كان الـ Cubit موجوداً مسبقاً
+            value: _prayerTimeCubit, // استخدام Service Locator (GetIt)
+            child: const PrayerTimesScreen(),
+          ),
+        );
     }
 
     return null;

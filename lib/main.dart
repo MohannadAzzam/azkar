@@ -1,10 +1,12 @@
 // import 'package:flutter/rendering.dart';
 
 import 'package:azkar/app_router.dart';
+import 'package:azkar/business_logic/prayer_time_cubit/prayer_time_cubit.dart';
 import 'package:azkar/business_logic/theme_cubit/theme_cubit.dart';
 import 'package:azkar/business_logic/zikir_by_category_cubit/zikir_by_category_cubit.dart';
+import 'package:azkar/data/repo/prayer_repository.dart';
 import 'package:azkar/data/repo/zikir_by_category.dart';
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -14,11 +16,13 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
+final prayerRepository = PrayerRepository();
+  final prayerTimeCubit = PrayerTimeCubit(prayerRepository)..fetchPrayerTimes();
   // await initializeDateFormatting('ar', "");
   // debugRepaintRainbowEnabled = true;
 
   WidgetsFlutterBinding.ensureInitialized();
-// إعدادات أندرويد (أيقونة التطبيق)
+  // إعدادات أندرويد (أيقونة التطبيق)
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('@mipmap/ic_launcher');
 
@@ -26,10 +30,15 @@ Future<void> main() async {
     android: initializationSettingsAndroid,
   );
 
-  await flutterLocalNotificationsPlugin.initialize(settings: initializationSettings);
+  await flutterLocalNotificationsPlugin.initialize(
+    settings: initializationSettings,
+  );
   runApp(
+
+
     MultiBlocProvider(
       providers: [
+        BlocProvider(create: (context) => PrayerTimeCubit(PrayerRepository())..fetchPrayerTimes()),
         BlocProvider(create: (context) => ThemeCubit()), // تعريف الثيم هنا
         BlocProvider(
           create: (context) =>
@@ -37,14 +46,15 @@ Future<void> main() async {
                 ..loadZikirByCategory(),
         ),
       ],
-      child: AzkarApp(appRouter: AppRouter()),
+      child: AzkarApp(appRouter: AppRouter(), prayerTimeCubit: prayerTimeCubit,),
     ),
   );
 }
 
 class AzkarApp extends StatelessWidget {
+final PrayerTimeCubit prayerTimeCubit;
   final AppRouter appRouter;
-  const AzkarApp({super.key, required this.appRouter});
+  const AzkarApp({super.key, required this.appRouter, required this.prayerTimeCubit,});
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +76,7 @@ class AzkarApp extends StatelessWidget {
           darkTheme: AppTheme.darkTheme,
           themeMode: state,
           // initialRoute: mainScaffold,
-          onGenerateRoute: appRouter.generateRoute,
+          onGenerateRoute:  AppRouter.generateRoute,
         );
       },
     );
