@@ -1,6 +1,4 @@
 import 'package:azkar/app_router.dart';
-import 'package:azkar/business_logic/prayer_time_cubit/prayer_time_cubit.dart';
-import 'package:azkar/data/repo/prayer_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:azkar/main.dart';
@@ -8,7 +6,7 @@ import 'package:azkar/main.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(AzkarApp(appRouter: AppRouter(), prayerTimeCubit: PrayerTimeCubit(PrayerRepository()),));
+    await tester.pumpWidget(AzkarApp(appRouter: AppRouter(), ));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

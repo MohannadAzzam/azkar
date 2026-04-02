@@ -19,7 +19,7 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   final List<Widget> _pages = [
     HomeScreen(),
-    Center(child: Text('المفضلة')),
+    Center(child: Text('القبلة')),
     PrayerTimesScreen(),
     BlocProvider(create: (context) => ThemeCubit(), child: SettingsScreen()),
     // Center(child: Text('الإعدادات')),
@@ -46,7 +46,7 @@ class _MainScaffoldState extends State<MainScaffold> {
         // unselectedItemColor: Colors.grey,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'الرئيسية'),
-          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'المفضلة'),
+          BottomNavigationBarItem(icon: Icon(Icons.explore), label: 'القبلة'),
           BottomNavigationBarItem(
             icon: Icon(Icons.mosque),
             label: 'مواقيت الصلاة',

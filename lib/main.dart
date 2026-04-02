@@ -16,8 +16,8 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
-final prayerRepository = PrayerRepository();
-  final prayerTimeCubit = PrayerTimeCubit(prayerRepository)..fetchPrayerTimes();
+  // final prayerRepository = PrayerRepository();
+  // final prayerTimeCubit = PrayerTimeCubit(prayerRepository)..fetchPrayerTimes();
   // await initializeDateFormatting('ar', "");
   // debugRepaintRainbowEnabled = true;
 
@@ -34,11 +34,12 @@ final prayerRepository = PrayerRepository();
     settings: initializationSettings,
   );
   runApp(
-
-
     MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => PrayerTimeCubit(PrayerRepository())..fetchPrayerTimes()),
+        BlocProvider(
+          create: (context) =>
+              PrayerTimeCubit(PrayerRepository())..fetchPrayerTimes(),
+        ),
         BlocProvider(create: (context) => ThemeCubit()), // تعريف الثيم هنا
         BlocProvider(
           create: (context) =>
@@ -46,15 +47,14 @@ final prayerRepository = PrayerRepository();
                 ..loadZikirByCategory(),
         ),
       ],
-      child: AzkarApp(appRouter: AppRouter(), prayerTimeCubit: prayerTimeCubit,),
+      child: AzkarApp(appRouter: AppRouter()),
     ),
   );
 }
 
 class AzkarApp extends StatelessWidget {
-final PrayerTimeCubit prayerTimeCubit;
   final AppRouter appRouter;
-  const AzkarApp({super.key, required this.appRouter, required this.prayerTimeCubit,});
+  const AzkarApp({super.key, required this.appRouter});
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +76,7 @@ final PrayerTimeCubit prayerTimeCubit;
           darkTheme: AppTheme.darkTheme,
           themeMode: state,
           // initialRoute: mainScaffold,
-          onGenerateRoute:  AppRouter.generateRoute,
+          onGenerateRoute: AppRouter.generateRoute,
         );
       },
     );

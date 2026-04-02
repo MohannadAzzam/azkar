@@ -12,19 +12,10 @@ class PrayerTimeCubit extends Cubit<PrayerTimeState> {
   Future<void> fetchPrayerTimes() async {
     if (state is PrayerTimeLoaded) return;
     emit(PrayerTimeLoading());
-
     try {
-      final (times, locationName) = await _prayerRepository.getTodayPrayerTimes();
-
-
-
-     
-      emit(
-        PrayerTimeLoaded(
-          prayerTimes: times,
-          locationName: locationName,
-        ),
-      );
+      final (times, locationName) = await _prayerRepository
+          .getTodayPrayerTimes();
+      emit(PrayerTimeLoaded(prayerTimes: times, locationName: locationName));
     } catch (e) {
       emit(PrayerTimeError("حدث خطأ : ${e.toString()}"));
     }

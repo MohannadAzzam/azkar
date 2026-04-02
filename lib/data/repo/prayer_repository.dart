@@ -3,30 +3,50 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 class PrayerRepository {
-  // لاحظ التغيير في نوع الإرجاع ليعيد قيمتين (PrayerTimes, String)
   Future<(PrayerTimes, String)> getTodayPrayerTimes() async {
-    // ... كود الصلاحيات كما هو ...
-
     Position position;
-    String cityName = "غزة، فلسطين"; // قيمة افتراضية
-
+    String cityName = "فشل تحديد الموقع";
+  
     try {
-      Position? lastKnown = await Geolocator.getLastKnownPosition();
-      position = lastKnown ?? await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(accuracy: LocationAccuracy.low),
-      ).timeout(const Duration(seconds: 5));
+      LocationPermission locationPermission =
+          await Geolocator.checkPermission();
 
-      // جلب اسم المدينة الحقيقي
-      List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+      if (locationPermission == LocationPermission.denied) {
+        locationPermission = await Geolocator.requestPermission();
+        if (locationPermission == LocationPermission.denied) {
+        }
+      }
+      if (locationPermission == LocationPermission.deniedForever) {
+        throw Exception("تم رفض صلاحية الموقع بشكل دائم");
+      }  
+      Position? lastKnown = await Geolocator.getLastKnownPosition();
+      position =
+          lastKnown ??
+          await Geolocator.getCurrentPosition(
+            locationSettings: LocationSettings(accuracy: LocationAccuracy.low),
+          ).timeout(Duration(seconds: 5));
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      ).timeout(Duration(seconds: 5));
+
       if (placemarks.isNotEmpty) {
         cityName = "${placemarks.first.locality}, ${placemarks.first.country}";
+        print("----------------------------------- ${cityName}");
       }
     } catch (e) {
       // في حال الخطأ نستخدم الإحداثيات الافتراضية
       position = Position(
-        latitude: 31.5, longitude: 34.4, 
-        timestamp: DateTime.now(), accuracy: 0, altitude: 0, 
-        heading: 0, speed: 0, speedAccuracy: 0, altitudeAccuracy: 0, headingAccuracy: 0,
+        latitude: 31.5,
+        longitude: 34.4,
+        timestamp: DateTime.now(),
+        accuracy: 0,
+        altitude: 0,
+        heading: 0,
+        speed: 0,
+        speedAccuracy: 0,
+        altitudeAccuracy: 0,
+        headingAccuracy: 0,
       );
     }
 
@@ -35,8 +55,7 @@ class PrayerRepository {
     params.madhab = Madhab.shafi;
 
     final prayerTimes = PrayerTimes.today(coordinates, params);
-    
-    // إرجاع القيمتين معاً
+
     return (prayerTimes, cityName);
   }
 }
