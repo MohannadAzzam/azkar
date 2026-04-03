@@ -1,5 +1,6 @@
 import 'package:adhan/adhan.dart';
 import 'package:azkar/data/repo/prayer_repository.dart';
+import 'package:azkar/services/notification_service.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
@@ -19,5 +20,10 @@ class PrayerTimeCubit extends Cubit<PrayerTimeState> {
     } catch (e) {
       emit(PrayerTimeError("حدث خطأ : ${e.toString()}"));
     }
+  }
+
+  void scheduleAllPrayers(PrayerTimes prayerTimes) {
+    final service = NotificationService();
+    service.scheduleNotification(1, "title", "body", DateTime.now().add(Duration(seconds: 10)));  
   }
 }

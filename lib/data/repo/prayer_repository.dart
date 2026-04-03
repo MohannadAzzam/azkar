@@ -6,35 +6,56 @@ class PrayerRepository {
   Future<(PrayerTimes, String)> getTodayPrayerTimes() async {
     Position position;
     String cityName = "فشل تحديد الموقع";
-  
+
     try {
       LocationPermission locationPermission =
           await Geolocator.checkPermission();
 
       if (locationPermission == LocationPermission.denied) {
         locationPermission = await Geolocator.requestPermission();
-        if (locationPermission == LocationPermission.denied) {
-        }
+        if (locationPermission == LocationPermission.denied) {}
       }
       if (locationPermission == LocationPermission.deniedForever) {
         throw Exception("تم رفض صلاحية الموقع بشكل دائم");
-      }  
+      }
       Position? lastKnown = await Geolocator.getLastKnownPosition();
+      if(lastKnown != null) {
+        position =lastKnown;
+        print("================================= Last Known Position: ${lastKnown.latitude}, ${lastKnown.longitude}");
+      } else {
+        print("================================= No Last Known Position available.");
+      
       position =
-          lastKnown ??
+          // lastKnown ??
           await Geolocator.getCurrentPosition(
             locationSettings: LocationSettings(accuracy: LocationAccuracy.low),
-          ).timeout(Duration(seconds: 5));
+          ).timeout(Duration(seconds: 20));
+      }
       List<Placemark> placemarks = await placemarkFromCoordinates(
         position.latitude,
         position.longitude,
-      ).timeout(Duration(seconds: 5));
+      ).timeout(Duration(seconds: 20));
 
       if (placemarks.isNotEmpty) {
-        cityName = "${placemarks.first.locality}, ${placemarks.first.country}";
-        print("----------------------------------- ${cityName}");
+       final p = placemarks.first;
+  
+  // نجمع الأجزاء المتوفرة فقط ونحذف الفراغات
+  List<String> parts = [];
+  
+  // جرب استخدام subLocality أو administrativeArea إذا كان locality فارغاً
+  String? city = p.locality ?? p.subLocality ?? p.administrativeArea;
+  String? country = p.country;
+
+  if (city != null && city.isNotEmpty) parts.add(city);
+  if (country != null && country.isNotEmpty) parts.add(country);
+
+  // ندمج الأجزاء بفاصلة، وإذا كانت القائمة فارغة نضع نصاً احتياطياً
+  cityName = parts.isNotEmpty ? parts.join(", ") : "موقع غير معروف";
+  
+  print("----------------------------------- $cityName");
       }
     } catch (e) {
+      print("================================ $e");
       // في حال الخطأ نستخدم الإحداثيات الافتراضية
       position = Position(
         latitude: 31.5,
