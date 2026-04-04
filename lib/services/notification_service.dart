@@ -3,14 +3,34 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
 class NotificationService {
-  final FlutterLocalNotificationsPlugin _notificationsPlugin = FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin _notificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
   Future<void> initNotification() async {
-    // طلب الإذن لأجهزة أندرويد 13+
-    await _notificationsPlugin.resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>()?.requestNotificationsPermission();
+tz.initializeTimeZones();
+
+    // final String currentTimeZone = await FlutterTimeZone.getLocalTimezone();
+    // tz.setLocalLocation(tz.getLocation(currentTimeZone));
+
+    final androidImplementation = _notificationsPlugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
+
+    await androidImplementation?.requestNotificationsPermission();
+
+    if (androidImplementation != null) {
+      await androidImplementation.requestExactAlarmsPermission();
+    }
 
     tz.initializeTimeZones();
+
+    // طلب الإذن لأجهزة أندرويد 13+
+    await _notificationsPlugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >()
+        ?.requestNotificationsPermission();
 
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -19,7 +39,6 @@ class NotificationService {
         InitializationSettings(android: initializationSettingsAndroid);
 
     await _notificationsPlugin.initialize(
-      
       settings: initializationSettings,
       onDidReceiveNotificationResponse: (details) {
         // ماذا يحدث عند الضغط على الإشعار
@@ -28,31 +47,39 @@ class NotificationService {
   }
 
   Future<void> showInstantNotification(String title, String body) async {
-    final AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
-      'azkar_channel',
-      'Daily Azkar',
-      styleInformation: BigTextStyleInformation(body),
-      importance: Importance.max,
-      priority: Priority.high,
+    final AndroidNotificationDetails androidDetails =
+        AndroidNotificationDetails(
+          'azkar_channel',
+          'Daily Azkar',
+          styleInformation: BigTextStyleInformation(body),
+          importance: Importance.max,
+          priority: Priority.high,
+        );
+
+    NotificationDetails platformDetails = NotificationDetails(
+      android: androidDetails,
     );
 
-    NotificationDetails platformDetails = NotificationDetails(android: androidDetails);
-
     await _notificationsPlugin.show(
-      id :0, // id
-      title : title , // title
+      id: 0, // id
+      title: title, // title
       body: body, // body
       notificationDetails: platformDetails,
     );
   }
 
-  Future<void> scheduleNotification(int id, String title, String body, DateTime scheduledDate) async {
+  Future<void> scheduleNotification(
+    int id,
+    String title,
+    String body,
+    DateTime scheduledDate,
+  ) async {
     // حماية: لا نجدول وقتاً قد مضى
     if (scheduledDate.isBefore(DateTime.now())) return;
 
     await _notificationsPlugin.zonedSchedule(
-      id: id ,
-      title : title ,
+      id: id,
+      title: title,
       body: body,
       scheduledDate: tz.TZDateTime.from(scheduledDate, tz.local),
       notificationDetails: NotificationDetails(
@@ -67,10 +94,7 @@ class NotificationService {
         ),
       ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      //  uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime, 
-       matchDateTimeComponents: DateTimeComponents.dateAndTime  
-      // هذا السطر إجباري لكي تعمل الجدولة
-      // uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.dateAndTime,
     );
   }
 }

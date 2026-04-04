@@ -6,7 +6,6 @@ import 'package:meta/meta.dart';
 
 part 'prayer_time_state.dart';
 
-
 class PrayerTimeCubit extends Cubit<PrayerTimeState> {
   final PrayerRepository _prayerRepository;
   // يفضل تعريف الـ Service هنا لعدم تكرار إنشائه
@@ -17,20 +16,29 @@ class PrayerTimeCubit extends Cubit<PrayerTimeState> {
   Future<void> fetchPrayerTimes() async {
     if (state is PrayerTimeLoaded) return;
     emit(PrayerTimeLoading());
+
     try {
-      final (times, locationName) = await _prayerRepository.getTodayPrayerTimes();
-      
+      final (times, locationName) = await _prayerRepository
+          .getTodayPrayerTimes();
+
       // بمجرد نجاح الجلب، نقوم بجدولة الإشعارات تلقائياً
-      scheduleAllPrayers(times);
-      
+      await scheduleAllPrayers(times);
+
       emit(PrayerTimeLoaded(prayerTimes: times, locationName: locationName));
     } catch (e) {
       emit(PrayerTimeError("حدث خطأ : ${e.toString()}"));
     }
   }
 
-  void scheduleAllPrayers(PrayerTimes prayerTimes) {
-    
+  Future<void> scheduleAllPrayers(PrayerTimes prayerTimes) async {
+    print('يجب ان يرسل اشعار خلال 10 ثواني من الان');
+    await _notificationService.scheduleNotification(
+      99,
+      "فحص التنبيهات",
+      "هذا التنبيه للاختبار فقط",
+      DateTime.now().add(Duration(seconds: 10)), // بعد دقيقة واحدة
+    );
+
     // 1. تعريف الصلوات وأوقاتها في قائمة
     final Map<int, Map<String, dynamic>> prayers = {
       0: {"name": "الفجر", "time": prayerTimes.fajr},
@@ -41,13 +49,14 @@ class PrayerTimeCubit extends Cubit<PrayerTimeState> {
     };
 
     // 2. Loop للمرور على كل صلاة وجدولتها
-    prayers.forEach((id, data) {
+    prayers.forEach((id, data)  async {
       _notificationService.scheduleNotification(
         id, // معرف فريد (0, 1, 2...)
         "حان وقت صلاة ${data['name']}",
         "حي على الصلاة.. لا تنسَ أذكار بعد الصلاة",
         data['time'], // الوقت الحقيقي من المكتبة
       );
+ 
     });
 
     print("تمت جدولة جميع الصلوات بنجاح!");

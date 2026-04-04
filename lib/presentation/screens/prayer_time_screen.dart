@@ -7,6 +7,8 @@ import 'package:intl/intl.dart';
 class PrayerTimesScreen extends StatelessWidget {
   const PrayerTimesScreen({super.key});
 
+  
+
   Map<String, dynamic> _getNextPrayer(dynamic times) {
     final now = DateTime.now();
     if (now.isBefore(times.fajr)) return {"name": "الفجر", "time": times.fajr};
