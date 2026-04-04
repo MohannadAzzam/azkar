@@ -68,17 +68,13 @@ class HomeScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // آية اليوم بتصميم كرت مميز
                   buildDailyQuote(todayAya: todayAya()),
 
-                  // قسم الإنجاز (تفعيل وإصلاح التصميم)
-                  // _buildProgressSection(primaryColor),
+              
                   const SectionTitle(title: 'أذكار أساسية'),
-                  // تأكد أن buildQuickAccess يعيد Row أو ListView.horizontal
                   SizedBox(height: 110, child: buildQuickAccess()),
 
                   const SectionTitle(title: 'التصنيفات'),
-                  // تأكد من استخدام Padding داخل buildCategoriesGrid
                   buildCategoriesGrid(context),
 
                   const SizedBox(height: 100),
@@ -91,67 +87,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // // تصميم محسن لبطاقة الإنجاز
-  // Widget _buildProgressSection(Color color) {
-  //   return Container(
-  //     margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-  //     padding: const EdgeInsets.all(20),
-  //     decoration: BoxDecoration(
-  //       color: Colors.white,
-  //       borderRadius: BorderRadius.circular(20),
-  //       boxShadow: [
-  //         BoxShadow(
-  //           color: Colors.black.withValues(alpha: 0.05),
-  //           blurRadius: 15,
-  //           offset: const Offset(0, 5),
-  //         ),
-  //       ],
-  //     ),
-  //     child: Row(
-  //       children: [
-  //         Container(
-  //           padding: const EdgeInsets.all(10),
-  //           decoration: BoxDecoration(
-  //             color: color.withValues(alpha: 0.1),
-  //             shape: BoxShape.circle,
-  //           ),
-  //           child: Icon(Icons.auto_graph, color: color),
-  //         ),
-  //         const SizedBox(width: 15),
-  //         Expanded(
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               const Text(
-  //                 "إنجازك اليوم",
-  //                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-  //               ),
-  //               Text(
-  //                 "قرأت 5 من أصل 12 ذكر",
-  //                 style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //         Stack(
-  //           alignment: Alignment.center,
-  //           children: [
-  //             CircularProgressIndicator(
-  //               value: 0.4,
-  //               strokeWidth: 6,
-  //               backgroundColor: Colors.grey.shade100,
-  //               color: Colors.orangeAccent,
-  //             ),
-  //             const Text(
-  //               "40%",
-  //               style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
-  //             ),
-  //           ],
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 }
 
 class SectionTitle extends StatelessWidget {
@@ -186,26 +121,6 @@ class SectionTitle extends StatelessWidget {
     );
   }
 }
-
-// Widget quickCard(String title, IconData icon, Color color) {
-//   return Container(
-//     width: 140,
-//     margin: EdgeInsets.all(4),
-//     decoration: BoxDecoration(
-//       color: Colors.white,
-//       borderRadius: BorderRadius.circular(12),
-//       boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
-//     ),
-//     child: Column(
-//       mainAxisAlignment: MainAxisAlignment.center,
-//       children: [
-//         Icon(icon, color: color, size: 35),
-//         SizedBox(height: 8),
-//         Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-//       ],
-//     ),
-//   );
-// }
 
 String getGreatings()  {
   var hour = DateTime.now().hour;

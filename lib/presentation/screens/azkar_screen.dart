@@ -7,8 +7,6 @@ class AzkarScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // bool isFavorite = false;
-
     return Scaffold(
       appBar: AppBar(title: Text(zikirCategory.category)),
       body: ListView.builder(
@@ -39,17 +37,6 @@ class AzkarScreen extends StatelessWidget {
                           style: TextStyle(fontSize: 16),
                         ),
                 ),
-                // Container(
-                //   padding: EdgeInsets.only(bottom: 8, left: 16, right: 16),
-                //   child: InkWell(
-                //     onTap: () {
-                //       isFavorite = !isFavorite;
-                //     },
-                //     child: isFavorite == false
-                //         ? Icon(Icons.favorite_border_outlined)
-                //         : Icon(Icons.favorite, color: Colors.red),
-                //   ),
-                // ),
               ],
             ),
           );

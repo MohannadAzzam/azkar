@@ -43,9 +43,7 @@ await NotificationService().showInstantNotification('تذكير', 'لا تنسى
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index) => setState(() => _selectedIndex = index),
-        // type: BottomNavigationBarType.fixed,
-        // selectedItemColor: Colors.teal,
-        // unselectedItemColor: Colors.grey,
+
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'الرئيسية'),
           BottomNavigationBarItem(icon: Icon(Icons.explore), label: 'القبلة'),
