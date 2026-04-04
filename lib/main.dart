@@ -6,6 +6,7 @@ import 'package:azkar/business_logic/theme_cubit/theme_cubit.dart';
 import 'package:azkar/business_logic/zikir_by_category_cubit/zikir_by_category_cubit.dart';
 import 'package:azkar/data/repo/prayer_repository.dart';
 import 'package:azkar/data/repo/zikir_by_category.dart';
+import 'package:azkar/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -22,9 +23,11 @@ Future<void> main() async {
   // debugRepaintRainbowEnabled = true;
 
   WidgetsFlutterBinding.ensureInitialized();
+  NotificationService notificationService = NotificationService();
+  await notificationService.initNotification();
   // إعدادات أندرويد (أيقونة التطبيق)
   const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
+      AndroidInitializationSettings('@mipmap/launcher_icon');
 
   const InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,

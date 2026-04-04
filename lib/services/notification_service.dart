@@ -6,6 +6,10 @@ class NotificationService {
   final FlutterLocalNotificationsPlugin _notificationsPlugin = FlutterLocalNotificationsPlugin();
 
   Future<void> initNotification() async {
+    // طلب الإذن لأجهزة أندرويد 13+
+    await _notificationsPlugin.resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>()?.requestNotificationsPermission();
+
     tz.initializeTimeZones();
 
     const AndroidInitializationSettings initializationSettingsAndroid =
@@ -14,53 +18,59 @@ class NotificationService {
     const InitializationSettings initializationSettings =
         InitializationSettings(android: initializationSettingsAndroid);
 
-    // التعديل هنا: استخدام named parameter 'onDidReceiveNotificationResponse'
     await _notificationsPlugin.initialize(
+      
+      settings: initializationSettings,
       onDidReceiveNotificationResponse: (details) {
         // ماذا يحدث عند الضغط على الإشعار
-      }, settings: initializationSettings,
+      },
     );
   }
 
   Future<void> showInstantNotification(String title, String body) async {
-    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
-      'prayer_channel',
-      'Prayer Notifications',
+    final AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+      'azkar_channel',
+      'Daily Azkar',
+      styleInformation: BigTextStyleInformation(body),
       importance: Importance.max,
       priority: Priority.high,
     );
 
-    const NotificationDetails platformDetails = NotificationDetails(android: androidDetails);
-    
-    // التعديل هنا: تمرير القيم كـ Named Parameters
+    NotificationDetails platformDetails = NotificationDetails(android: androidDetails);
+
     await _notificationsPlugin.show(
-      id: 0, // id
-      title: title, // title
+      id :0, // id
+      title : title , // title
       body: body, // body
-      payload: null,
       notificationDetails: platformDetails,
     );
   }
 
   Future<void> scheduleNotification(int id, String title, String body, DateTime scheduledDate) async {
+    // حماية: لا نجدول وقتاً قد مضى
+    if (scheduledDate.isBefore(DateTime.now())) return;
+
     await _notificationsPlugin.zonedSchedule(
-      id: id,
-      title: title,
+      id: id ,
+      title : title ,
       body: body,
       scheduledDate: tz.TZDateTime.from(scheduledDate, tz.local),
-      notificationDetails: const NotificationDetails(
+      notificationDetails: NotificationDetails(
         android: AndroidNotificationDetails(
           'prayer_id',
           'Prayer Alarms',
           channelDescription: 'Notifications for prayer times',
           importance: Importance.max,
+          playSound: true,
           priority: Priority.high,
+          styleInformation: BigTextStyleInformation(body), // لعرض الذكر كاملاً
         ),
       ),
-      // التعديل هنا: أسماء الباراميترز الجديدة
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-        // payload: null,
-        // matchDateTimeComponents: DateTimeComponents.values
+      //  uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime, 
+       matchDateTimeComponents: DateTimeComponents.dateAndTime  
+      // هذا السطر إجباري لكي تعمل الجدولة
+      // uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
     );
   }
 }

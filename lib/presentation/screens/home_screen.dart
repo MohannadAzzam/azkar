@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:azkar/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import '../widgets/build_categories_grid.dart';
 import '../widgets/build_daily_quote.dart';
@@ -206,14 +207,18 @@ class SectionTitle extends StatelessWidget {
 //   );
 // }
 
-String getGreatings() {
+String getGreatings()  {
   var hour = DateTime.now().hour;
   if (hour < 12) {
+ NotificationService().showInstantNotification('صباح الخير', 'لا تنسَ أذكار الصباح');
+
     return "صباح الخير، لا تنسَ أذكار الصباح";
   }
   if (hour < 17) {
+    NotificationService().showInstantNotification('طاب يومك', 'طاب يومك بذكر الله');
     return "طاب يومك بذكر الله";
   }
+  NotificationService().showInstantNotification('مساء الخير', 'هل قرأت أذكار المساء؟');
   return "مساء الخير، هل قرأت أذكار المساء؟";
 }
 
