@@ -1,8 +1,9 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../business_logic/zikir_cubit/zikir_cubit.dart';
 import '../../constants/strings.dart';
 import '../../data/models/zikir_category.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 Widget buildQuickAccess() {
   return BlocBuilder<ZikirCubit, ZikirState>(
@@ -22,7 +23,7 @@ Widget buildQuickAccess() {
             .toList();
 
         return SizedBox(
-          height: 130, // طول متناسق مع حجم العناصر
+          height: 130,
           child: ListView.builder(
             itemCount: quickAzkar.length,
             scrollDirection: Axis.horizontal,
@@ -33,24 +34,25 @@ Widget buildQuickAccess() {
 
               IconData icon;
               Color color;
-              
-              // تخصيص الألوان لتكون متناسقة مع روح التطبيق
+
               if (item.category == "أذكار الصباح") {
                 icon = Icons.wb_sunny_rounded;
-                color = const Color(0xFFF59E0B); // برتقالي ذهبي
+                color = const Color(0xFFF59E0B);
               } else if (item.category == "أذكار المساء") {
                 icon = Icons.dark_mode_rounded;
-                color = const Color(0xFF3F51B5); // أزرق ملكي
+                color = const Color(
+                  0xFF64B5F6,
+                ); // تفتيح الأزرق قليلاً للوضع الداكن
               } else {
                 icon = Icons.hotel_rounded;
-                color = const Color(0xFF673AB7); // بنفسجي هادئ
+                color = const Color(0xFF9575CD); // تفتيح البنفسجي قليلاً
               }
 
               return _quickCard(
                 item.category,
                 icon,
                 color,
-                context,
+                context, // نمرر الـ Context لاستخدامه في جلب الثيم
                 zikirCategory: item,
               );
             },
@@ -69,45 +71,55 @@ Widget _quickCard(
   BuildContext context, {
   ZikirCategory? zikirCategory,
 }) {
+  // جلب بيانات الثيم الحالي
+  final theme = Theme.of(context);
+  final isDark = theme.brightness == Brightness.dark;
+
   return Padding(
-    padding: const EdgeInsets.only(left: 12), // مسافة بين الكروت
+    padding: const EdgeInsets.only(left: 12),
     child: InkWell(
       onTap: () {
         Navigator.pushNamed(context, azkarScreen, arguments: zikirCategory);
       },
-      borderRadius: BorderRadius.circular(20), // لضمان أن تأثير الضغطة دائري
+      borderRadius: BorderRadius.circular(20),
       child: Container(
-        width: 110,
+        width: MediaQuery.of(context).size.width * 0.3,
         decoration: BoxDecoration(
-          color: Colors.white,
+          // استخدام لون الـ Surface من الثيم (سيتحول لرمادي غامق في الداكن وتلقائياً)
+          color: theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04), // ظل ناعم جداً
+              // ظل أخف في الوضع الداكن
+              color: isDark
+                  ? Colors.black26
+                  : Colors.black.withValues(alpha: 0.04),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
           ],
+          // إضافة إطار خفيف جداً في الوضع الداكن لتمييز الكروت
+          border: isDark ? Border.all(color: Colors.white10, width: 1) : null,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // دائرة خلفية للأيقونة لتعطي مظهراً عصرياً
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.1),
+                color: color.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
               child: Icon(icon, color: color, size: 28),
             ),
             const SizedBox(height: 12),
             Text(
-              title.replaceAll("أذكار ", ""), // تبسيط النص (مثلاً "الصباح" بدلاً من "أذكار الصباح")
-              style: const TextStyle(
+              title.replaceAll("أذكار ", ""),
+              style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
-                color: Color(0xFF424242),
+                // استخدام لون النص من الثيم ليتحول للأبيض في الداكن تلقائياً
+                color: theme.textTheme.bodyLarge?.color,
               ),
             ),
           ],

@@ -1,36 +1,26 @@
+import '../main.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:flutter_timezone/flutter_timezone.dart';
 
 class NotificationService {
   final FlutterLocalNotificationsPlugin _notificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
   Future<void> initNotification() async {
-tz.initializeTimeZones();
-
-    // final String currentTimeZone = await FlutterTimeZone.getLocalTimezone();
-    // tz.setLocalLocation(tz.getLocation(currentTimeZone));
-
-    final androidImplementation = _notificationsPlugin
-        .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin
-        >();
-
-    await androidImplementation?.requestNotificationsPermission();
-
-    if (androidImplementation != null) {
-      await androidImplementation.requestExactAlarmsPermission();
-    }
-
     tz.initializeTimeZones();
 
-    // طلب الإذن لأجهزة أندرويد 13+
-    await _notificationsPlugin
-        .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin
-        >()
-        ?.requestNotificationsPermission();
+    // جلب المنطقة الزمنية الفعلية للجهاز (خطوة حرجة جداً)
+    try {
+      final timezoneinfo = await FlutterTimezone.getLocalTimezone();
+      final String currentTimeZone = timezoneinfo.identifier;
+      print("Current time zone $currentTimeZone");
+      tz.setLocalLocation(tz.getLocation(currentTimeZone));
+    } catch (e) {
+      tz.setLocalLocation(tz.UTC); // احتياطي: UTC
+      print("Error setting local timezone: $e");
+    }
 
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -41,31 +31,44 @@ tz.initializeTimeZones();
     await _notificationsPlugin.initialize(
       settings: initializationSettings,
       onDidReceiveNotificationResponse: (details) {
-        // ماذا يحدث عند الضغط على الإشعار
+        // ScaffoldMessenger.of(BuildContext).showSnackBar(snackBar)
       },
     );
+
+    // طلب صلاحيات أندرويد 13 فما فوق
+    final androidImplementation = _notificationsPlugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
+    await androidImplementation?.requestNotificationsPermission();
+    await androidImplementation?.requestExactAlarmsPermission();
   }
 
+  // أضف هذه الدالة داخل كلاس NotificationService
   Future<void> showInstantNotification(String title, String body) async {
-    final AndroidNotificationDetails androidDetails =
+    const AndroidNotificationDetails androidDetails =
         AndroidNotificationDetails(
-          'azkar_channel',
-          'Daily Azkar',
-          styleInformation: BigTextStyleInformation(body),
+          'instant_channel', // معرف القناة
+          'تنبيهات فورية', // اسم القناة
           importance: Importance.max,
           priority: Priority.high,
         );
 
-    NotificationDetails platformDetails = NotificationDetails(
+    const NotificationDetails platformDetails = NotificationDetails(
       android: androidDetails,
     );
 
     await _notificationsPlugin.show(
-      id: 0, // id
-      title: title, // title
-      body: body, // body
+      id: 0, // ID فريد للإشعار الفوري
+      title: title,
+      body: body,
       notificationDetails: platformDetails,
     );
+  }
+
+  static Future<void> cancelAllNotifications() async {
+    await flutterLocalNotificationsPlugin.cancelAll();
+    print("تم حذف جميع الاشعارات");
   }
 
   Future<void> scheduleNotification(
@@ -74,27 +77,26 @@ tz.initializeTimeZones();
     String body,
     DateTime scheduledDate,
   ) async {
-    // حماية: لا نجدول وقتاً قد مضى
-    if (scheduledDate.isBefore(DateTime.now())) return;
-
     await _notificationsPlugin.zonedSchedule(
       id: id,
       title: title,
       body: body,
+      // تحويل DateTime العادي إلى TZDateTime المتوافق مع المنطقة الزمنية
       scheduledDate: tz.TZDateTime.from(scheduledDate, tz.local),
-      notificationDetails: NotificationDetails(
+      notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(
-          'prayer_id',
-          'Prayer Alarms',
-          channelDescription: 'Notifications for prayer times',
+          'prayer_channel',
+          'مواقيت الصلاة',
+          channelDescription: 'تنبيهات الأذان والصلوات',
           importance: Importance.max,
-          playSound: true,
           priority: Priority.high,
-          styleInformation: BigTextStyleInformation(body), // لعرض الذكر كاملاً
+          playSound: true,
         ),
       ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      matchDateTimeComponents: DateTimeComponents.dateAndTime,
+      // uiLocalNotificationDateInterpretation:
+      // UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.time, // لتكرارها يومياً
     );
   }
 }

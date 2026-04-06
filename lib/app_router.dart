@@ -1,9 +1,9 @@
-import 'package:azkar/business_logic/prayer_time_cubit/prayer_time_cubit.dart';
-import 'package:azkar/business_logic/zikir_by_category_cubit/zikir_by_category_cubit.dart';
-import 'package:azkar/data/repo/prayer_repository.dart';
-import 'package:azkar/data/repo/zikir_by_category.dart';
-import 'package:azkar/presentation/screens/prayer_time_screen.dart';
-import 'package:azkar/presentation/screens/settings_screen.dart';
+import 'business_logic/prayer_time_cubit/prayer_time_cubit.dart';
+import 'business_logic/zikir_by_category_cubit/zikir_by_category_cubit.dart';
+import 'data/repo/prayer_repository.dart';
+import 'data/repo/zikir_by_category.dart';
+import 'presentation/screens/prayer_time_screen.dart';
+import 'presentation/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -12,17 +12,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
-
+final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
 Future<void> main() async {
+  tz.initializeTimeZones();
   // final prayerRepository = PrayerRepository();
   // final prayerTimeCubit = PrayerTimeCubit(prayerRepository)..fetchPrayerTimes();
   // await initializeDateFormatting('ar', "");
   // debugRepaintRainbowEnabled = true;
 
   WidgetsFlutterBinding.ensureInitialized();
+  final prefs = await SharedPreferences.getInstance();
+  bool isDark = prefs.getBool('is_dark_mode') ?? false;
+  themeNotifier.value = isDark ? ThemeMode.dark : ThemeMode.light;
   NotificationService notificationService = NotificationService();
   await notificationService.initNotification();
   // إعدادات أندرويد (أيقونة التطبيق)
@@ -61,10 +67,12 @@ class AzkarApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ThemeCubit, ThemeMode>(
-      builder: (context, state) {
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: themeNotifier,
+      builder: (_, mode, _) {
         return MaterialApp(
-          key: ValueKey(state),
+          themeMode: mode,
+          // key: ValueKey(state),
           debugShowCheckedModeBanner: false,
           title: 'تطبيق الأذكار',
           locale: Locale('ar', 'DZ'),
@@ -77,7 +85,7 @@ class AzkarApp extends StatelessWidget {
           // home: const MainScaffold(),
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
-          themeMode: state,
+          // themeMode: state,
           // initialRoute: mainScaffold,
           onGenerateRoute: AppRouter.generateRoute,
         );
@@ -87,7 +95,6 @@ class AzkarApp extends StatelessWidget {
 }
 
 class AppTheme {
-  // ألوان ثابتة للسهولة
   static const Color primaryTeal = Colors.teal;
   static const Color lightBg = Color(0xFFF8FAFB);
   static const Color darkBg = Color(0xFF121212);
@@ -96,44 +103,67 @@ class AppTheme {
   // --- ثيم الوضع الداكن ---
   static ThemeData get darkTheme {
     return ThemeData(
-      // useMaterial3: true,
+      // 1. تفعيل Material3 للوضعين لضمان تناسق شكل الأزرار والـ Switch
+      useMaterial3: true,
       brightness: Brightness.dark,
-      primaryColor: primaryTeal,
-      scaffoldBackgroundColor: darkBg,
-      colorScheme: const ColorScheme.dark(
+
+      // 2. استخدام colorScheme هو الطريقة الحديثة بدلاً من primaryColor المنفصل
+      colorScheme: ColorScheme.dark(
         primary: primaryTeal,
+        onPrimary: Colors.white,
         secondary: Colors.tealAccent,
         surface: darkCard,
+        // background: darkBg,
       ),
-      // إعدادات البار السفلي للوضع الداكن
+
+      scaffoldBackgroundColor: darkBg,
+
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: Color(0xFF1F1F1F), // رمادي غامق جداً وليس أسود
+        backgroundColor: Color(0xFF1F1F1F),
         selectedItemColor: Colors.tealAccent,
         unselectedItemColor: Colors.grey,
         elevation: 10,
         type: BottomNavigationBarType.fixed,
       ),
 
-      // إعدادات الزر العائم للوضع الداكن
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: Colors.teal,
+        backgroundColor: primaryTeal,
         foregroundColor: Colors.white,
       ),
 
+      // 3. تصحيح تمرير الخط للـ TextTheme لضمان تطبيقه على كل النصوص
       textTheme: GoogleFonts.cairoTextTheme(ThemeData.dark().textTheme),
+
       appBarTheme: AppBarTheme(
         backgroundColor: const Color(0xFF1F1F1F),
+        foregroundColor: Colors.white, // لون الأيقونات والنص في الأب بار
         centerTitle: true,
         elevation: 0,
         titleTextStyle: GoogleFonts.cairo(
           fontSize: 20,
+          color: Colors.white,
           fontWeight: FontWeight.bold,
         ),
       ),
+
       cardTheme: CardThemeData(
+        // اسمها CardTheme وليس CardThemeData
         color: darkCard,
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      ),
+
+      // 4. إضافة ثيم الـ Switch ليتناسب مع لون التيل (Teal)
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith(
+          (states) =>
+              states.contains(WidgetState.selected) ? primaryTeal : null,
+        ),
+        trackColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? primaryTeal.withValues(alpha:0.5)
+              : null,
+        ),
       ),
     );
   }
@@ -143,28 +173,32 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
-      primaryColor: primaryTeal,
-      scaffoldBackgroundColor: lightBg,
+
       colorScheme: const ColorScheme.light(
         primary: primaryTeal,
+        onPrimary: Colors.white,
         secondary: primaryTeal,
         surface: Colors.white,
+        // background: lightBg,
       ),
-      // إعدادات البار السفلي للوضع الفاتح
+
+      scaffoldBackgroundColor: lightBg,
+
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: Colors.white,
-        selectedItemColor: Colors.teal,
+        selectedItemColor: primaryTeal,
         unselectedItemColor: Colors.grey,
         elevation: 10,
         type: BottomNavigationBarType.fixed,
       ),
 
-      // إعدادات الزر العائم للوضع الفاتح
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: Colors.teal,
+        backgroundColor: primaryTeal,
         foregroundColor: Colors.white,
       ),
+
       textTheme: GoogleFonts.cairoTextTheme(ThemeData.light().textTheme),
+
       appBarTheme: AppBarTheme(
         backgroundColor: primaryTeal,
         foregroundColor: Colors.white,
@@ -172,9 +206,11 @@ class AppTheme {
         elevation: 0,
         titleTextStyle: GoogleFonts.cairo(
           fontSize: 20,
+          color: Colors.white,
           fontWeight: FontWeight.bold,
         ),
       ),
+
       cardTheme: CardThemeData(
         color: Colors.white,
         elevation: 2,

@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:azkar/business_logic/prayer_time_cubit/prayer_time_cubit.dart';
+import '../../business_logic/prayer_time_cubit/prayer_time_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -7,33 +7,46 @@ import 'package:intl/intl.dart';
 class PrayerTimesScreen extends StatelessWidget {
   const PrayerTimesScreen({super.key});
 
-  
-
   Map<String, dynamic> _getNextPrayer(dynamic times) {
     final now = DateTime.now();
-    if (now.isBefore(times.fajr)) return {"name": "الفجر", "time": times.fajr};
-    if (now.isBefore(times.dhuhr))return {"name": "الظهر", "time": times.dhuhr};
-    if (now.isBefore(times.asr)) return {"name": "العصر", "time": times.asr};
-    if (now.isBefore(times.maghrib))return {"name": "المغرب", "time": times.maghrib};
-    if (now.isBefore(times.isha)) return {"name": "العشاء", "time": times.isha};
-    // إذا انتهت صلوات اليوم، الصلاة القادمة هي فجر الغد
-    return {"name": "الفجر", "time": times.fajr.add(const Duration(days: 1))};
+    final Map<String, DateTime> localTimes = {
+      "الفجر": times.fajr.toLocal(),
+      "الظهر": times.dhuhr.toLocal(),
+      "العصر": times.asr.toLocal(),
+      "المغرب": times.maghrib.toLocal(),
+      "العشاء": times.isha.toLocal(),
+    };
+
+    if (now.isBefore(localTimes["الفجر"]!))return {"name": "الفجر", "time": localTimes["الفجر"]};
+    if (now.isBefore(localTimes["الظهر"]!))return {"name": "الظهر", "time": localTimes["الظهر"]};
+    if (now.isBefore(localTimes["العصر"]!))return {"name": "العصر", "time": localTimes["العصر"]};
+    if (now.isBefore(localTimes["المغرب"]!))return {"name": "المغرب", "time": localTimes["المغرب"]};
+    if (now.isBefore(localTimes["العشاء"]!))return {"name": "العشاء", "time": localTimes["العشاء"]};
+
+    return {
+      "name": "الفجر",
+      "time": localTimes["الفجر"]!.add(const Duration(days: 1)),
+    };
   }
 
   @override
   Widget build(BuildContext context) {
-    final Color primaryColor = Colors.teal.shade700;
+    // جلب ألوان الثيم الحالي
+    final theme = Theme.of(context);
+    // final isDark = theme.brightness == Brightness.dark;
+    final primaryColor = theme.colorScheme.primary;
+
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      // استخدام لون الخلفية من الثيم بدلاً من اللون الثابت
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
+        backgroundColor: primaryColor,
         title: const Text(
           "مواقيت الصلاة",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: primaryColor,
-        foregroundColor: Colors.white,
-        elevation: 0,
+        // الألوان ستؤخذ تلقائياً من AppBarTheme في AppTheme
       ),
       body: BlocBuilder<PrayerTimeCubit, PrayerTimeState>(
         builder: (context, state) {
@@ -43,48 +56,49 @@ class PrayerTimesScreen extends StatelessWidget {
             return Center(
               child: Text(
                 state.message,
-                style: TextStyle(color: Colors.red.shade400),
+                style: const TextStyle(color: Colors.red),
               ),
             );
           } else if (state is PrayerTimeLoaded) {
             final times = state.prayerTimes;
             final nextPrayerData = _getNextPrayer(times);
+
             final List<Map<String, dynamic>> prayers = [
               {
                 "name": "الفجر",
-                "time": DateFormat.jm().format(times.fajr),
+                "time": times.fajr.toLocal(),
                 "icon": Icons.wb_twilight,
                 "color": Colors.blue.shade300,
               },
               {
                 "name": "الشروق",
-                "time": DateFormat.jm().format(times.sunrise),
+                "time": times.sunrise.toLocal(),
                 "icon": Icons.wb_sunny_outlined,
                 "color": Colors.orange.shade300,
               },
               {
                 "name": "الظهر",
-                "time": DateFormat.jm().format(times.dhuhr),
+                "time": times.dhuhr.toLocal(),
                 "icon": Icons.wb_sunny,
                 "color": Colors.amber.shade600,
               },
               {
                 "name": "العصر",
-                "time": DateFormat.jm().format(times.asr),
+                "time": times.asr.toLocal(),
                 "icon": Icons.sunny_snowing,
                 "color": Colors.deepOrange.shade400,
               },
               {
                 "name": "المغرب",
-                "time": DateFormat.jm().format(times.maghrib),
+                "time": times.maghrib.toLocal(),
                 "icon": Icons.nights_stay,
                 "color": Colors.indigo.shade400,
               },
               {
                 "name": "العشاء",
-                "time": DateFormat.jm().format(times.isha),
+                "time": times.isha.toLocal(),
                 "icon": Icons.bedtime,
-                "color": Colors.blueGrey.shade800,
+                "color": Colors.blueGrey.shade400,
               },
             ];
 
@@ -96,6 +110,7 @@ class PrayerTimesScreen extends StatelessWidget {
                     final now = DateTime.now();
                     final remaining = (nextPrayerData['time'] as DateTime)
                         .difference(now);
+
                     final hours = remaining.inHours.toString().padLeft(2, '0');
                     final minutes = (remaining.inMinutes % 60)
                         .toString()
@@ -105,6 +120,7 @@ class PrayerTimesScreen extends StatelessWidget {
                         .padLeft(2, '0');
 
                     return _buildNextPrayerHeader(
+                      context: context,
                       color: primaryColor,
                       nextPrayerName: nextPrayerData['name'],
                       remainingTime: "$hours:$minutes:$seconds",
@@ -112,9 +128,7 @@ class PrayerTimesScreen extends StatelessWidget {
                     );
                   },
                 ),
-
                 const SizedBox(height: 20),
-
                 Expanded(
                   child: ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -124,28 +138,13 @@ class PrayerTimesScreen extends StatelessWidget {
                       final bool isNext =
                           nextPrayerData['name'] == prayer['name'];
 
-                      return TweenAnimationBuilder<double>(
-                        tween: Tween<double>(begin: 0.0, end: 1.0),
-                        duration: Duration(milliseconds: 500 + (index * 100)),
-                        curve: Curves.easeOutCubic,
-                        builder: (context, value, child) {
-                          return Opacity(
-                            opacity: value,
-                            child: Transform.translate(
-                              offset: Offset(
-                                0,
-                                30 * (1 - value),
-                              ), // انزلاق بسيط للأعلى
-                              child: _prayerTile(
-                                prayer['name'],
-                                prayer['time'],
-                                prayer['icon'],
-                                prayer['color'],
-                                isNext,
-                              ),
-                            ),
-                          );
-                        },
+                      return _prayerTile(
+                        context,
+                        prayer['name'],
+                        DateFormat.jm().format(prayer['time']),
+                        prayer['icon'],
+                        prayer['color'],
+                        isNext,
                       );
                     },
                   ),
@@ -153,14 +152,19 @@ class PrayerTimesScreen extends StatelessWidget {
               ],
             );
           }
-          return const Center(child: Text("Unknown state"));
+          return Center(
+            child: Text(
+              "يرجى تفعيل الموقع لجلب البيانات",
+              style: theme.textTheme.bodyMedium,
+            ),
+          );
         },
       ),
     );
   }
 
-  // ميثود الهيدر (بقيت كما هي مع استقبال القيم الديناميكية)
   Widget _buildNextPrayerHeader({
+    required BuildContext context,
     required Color color,
     required String nextPrayerName,
     required String remainingTime,
@@ -172,6 +176,13 @@ class PrayerTimesScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: color,
         borderRadius: const BorderRadius.vertical(bottom: Radius.circular(40)),
+        boxShadow: [
+          BoxShadow(
+            color: color.withValues(alpha:0.3),
+            blurRadius: 15,
+            offset: const Offset(0, 8),
+          ),
+        ],
       ),
       child: Column(
         children: [
@@ -204,24 +215,34 @@ class PrayerTimesScreen extends StatelessWidget {
   }
 
   Widget _prayerTile(
+    BuildContext context,
     String name,
     String time,
     IconData icon,
     Color iconColor,
     bool isCurrent,
   ) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       decoration: BoxDecoration(
-        color: isCurrent ? Colors.teal.withValues(alpha: 0.1) : Colors.white,
+        // استخدام لون الـ Surface من الثيم (أبيض في الفاتح، ورمادي غامق في الداكن)
+        color: isCurrent
+            ? theme.colorScheme.primary.withValues(alpha: isDark ? 0.2 : 0.1)
+            : theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
         border: isCurrent
-            ? Border.all(color: Colors.teal.shade300, width: 1.5)
+            ? Border.all(
+                color: theme.colorScheme.primary.withValues(alpha:0.5),
+                width: 1.5,
+              )
             : null,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: isDark ? Colors.black26 : Colors.black.withValues(alpha:0.03),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -232,7 +253,7 @@ class PrayerTimesScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: iconColor.withValues(alpha: 0.1),
+              color: iconColor.withValues(alpha:0.15),
               shape: BoxShape.circle,
             ),
             child: Icon(icon, color: iconColor, size: 24),
@@ -243,7 +264,12 @@ class PrayerTimesScreen extends StatelessWidget {
             style: TextStyle(
               fontSize: 18,
               fontWeight: isCurrent ? FontWeight.bold : FontWeight.w500,
-              color: isCurrent ? Colors.teal.shade900 : Colors.black87,
+              color: isCurrent
+                  ? theme.colorScheme.primary
+                  : theme
+                        .textTheme
+                        .bodyLarge
+                        ?.color, // استخدام لون النص من الثيم
             ),
           ),
           const Spacer(),
@@ -252,7 +278,9 @@ class PrayerTimesScreen extends StatelessWidget {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: isCurrent ? Colors.teal : Colors.grey.shade600,
+              color: isCurrent
+                  ? theme.colorScheme.primary
+                  : theme.textTheme.bodyMedium?.color?.withValues(alpha:0.6),
             ),
           ),
         ],

@@ -1,6 +1,6 @@
-import 'package:azkar/business_logic/zikir_by_category_cubit/zikir_by_category_cubit.dart';
-import 'package:azkar/constants/strings.dart';
-import 'package:azkar/data/models/zikir_category.dart';
+import '../../business_logic/zikir_by_category_cubit/zikir_by_category_cubit.dart';
+import '../../constants/strings.dart';
+import '../../data/models/zikir_category.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,16 +9,39 @@ class CategoryItem {
   final IconData icon;
   final Color accentColor; // اللون الأساسي للأيقونة والخلفية الخفيفة
 
-  CategoryItem({required this.title, required this.icon, required this.accentColor});
+  CategoryItem({
+    required this.title,
+    required this.icon,
+    required this.accentColor,
+  });
 }
 
 Widget buildCategoriesGrid(BuildContext context) {
   final List<CategoryItem> categoryUI = [
-    CategoryItem(title: 'أذكار الصلاة', icon: Icons.mosque_outlined, accentColor: Colors.teal),
-    CategoryItem(title: 'أدعية نبوية', icon: Icons.auto_stories_outlined, accentColor: Colors.blueAccent),
-    CategoryItem(title: 'أذكار الطعام', icon: Icons.restaurant_menu_outlined, accentColor: Colors.orange),
-    CategoryItem(title: 'دعاء ختم القرآن', icon: Icons.menu_book_outlined, accentColor: Colors.purple),
+    CategoryItem(
+      title: 'أذكار الصلاة',
+      icon: Icons.mosque_outlined,
+      accentColor: Colors.teal,
+    ),
+    CategoryItem(
+      title: 'أدعية نبوية',
+      icon: Icons.auto_stories_outlined,
+      accentColor: Colors.blueAccent,
+    ),
+    CategoryItem(
+      title: 'أذكار الطعام',
+      icon: Icons.restaurant_menu_outlined,
+      accentColor: Colors.orange,
+    ),
+    CategoryItem(
+      title: 'دعاء ختم القرآن',
+      icon: Icons.menu_book_outlined,
+      accentColor: Colors.purple,
+    ),
   ];
+  final theme = Theme.of(context);
+
+  final isDark = theme.brightness == Brightness.dark;
 
   return BlocBuilder<ZikirByCategoryCubit, ZikirByCategoryState>(
     builder: (context, state) {
@@ -46,17 +69,25 @@ Widget buildCategoriesGrid(BuildContext context) {
 
             final actualData = state.azkarList.firstWhere(
               (element) => element.category.trim() == uiItem.title.trim(),
-              orElse: () => ZikirCategory(id: 0, category: uiItem.title, content: []),
+              orElse: () =>
+                  ZikirCategory(id: 0, category: uiItem.title, content: []),
             );
 
             return InkWell(
               onTap: () {
                 if (actualData.content.isNotEmpty) {
-                  Navigator.pushNamed(context, azkarScreen, arguments: actualData);
+                  Navigator.pushNamed(
+                    context,
+                    azkarScreen,
+                    arguments: actualData,
+                  );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('سيتم إضافة هذا القسم قريباً إن شاء الله', textAlign: TextAlign.center),
+                      content: Text(
+                        'سيتم إضافة هذا القسم قريباً إن شاء الله',
+                        textAlign: TextAlign.center,
+                      ),
                       behavior: SnackBarBehavior.floating,
                       margin: EdgeInsets.all(20),
                     ),
@@ -66,15 +97,22 @@ Widget buildCategoriesGrid(BuildContext context) {
               borderRadius: BorderRadius.circular(24),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white, // توحيد خلفية البطاقات للون الأبيض
+                  color: theme
+                      .colorScheme
+                      .surface, // توحيد خلفية البطاقات للون الأبيض
                   borderRadius: BorderRadius.circular(24),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.04), // ظل ناعم جداً متسق مع باقي التطبيق
+                      color: isDark
+                          ? Colors.black26
+                          : Colors.black.withValues(alpha: 0.04),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
                   ],
+                  border: isDark
+                      ? Border.all(color: Colors.white10, width: 1)
+                      : null,
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -83,7 +121,7 @@ Widget buildCategoriesGrid(BuildContext context) {
                     Container(
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
-                        color: uiItem.accentColor.withValues(alpha:  0.1),
+                        color: uiItem.accentColor.withValues(alpha: 0.1),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
@@ -95,10 +133,10 @@ Widget buildCategoriesGrid(BuildContext context) {
                     const SizedBox(height: 12),
                     Text(
                       uiItem.title,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF2D3436), // لون خط غامق هادئ
+                        color: theme.textTheme.bodyLarge?.color,
                       ),
                     ),
                   ],
@@ -108,7 +146,7 @@ Widget buildCategoriesGrid(BuildContext context) {
           },
         );
       }
-      
+
       return const Center(child: Text('حدث خطأ أثناء تحميل التصنيفات'));
     },
   );

@@ -1,5 +1,5 @@
-import 'package:azkar/data/models/zikir_category.dart';
-import 'package:azkar/data/repo/zikir_by_category.dart';
+import '../../data/models/zikir_category.dart';
+import '../../data/repo/zikir_by_category.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 

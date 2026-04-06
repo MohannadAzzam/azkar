@@ -1,8 +1,5 @@
-import 'package:azkar/business_logic/theme_cubit/theme_cubit.dart';
-import 'package:azkar/presentation/screens/prayer_time_screen.dart';
-import 'package:azkar/presentation/screens/settings_screen.dart';
-import 'package:azkar/services/notification_service.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'prayer_time_screen.dart';
+import 'settings_screen.dart';
 
 import '../../constants/strings.dart';
 import 'home_screen.dart';
@@ -19,41 +16,86 @@ class _MainScaffoldState extends State<MainScaffold> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    HomeScreen(),
-    Center(child: Text('القبلة')),
-    PrayerTimesScreen(),
-    BlocProvider(create: (context) => ThemeCubit(), child: SettingsScreen()),
-    // Center(child: Text('الإعدادات')),
+    const HomeScreen(),
+    const Center(child: Text("صفحة القبلة معطلة")),
+    const PrayerTimesScreen(),
+    const SettingsScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex],
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          Navigator.pushNamed(context, tasbihScreen);
-await NotificationService().showInstantNotification('تذكير', 'لا تنسى ذكر الله!');
-        },
-        // backgroundColor: Colors.teal,
-        child: Icon(Icons.touch_app),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      body: IndexedStack(index: _selectedIndex, children: _pages),
 
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) => setState(() => _selectedIndex = index),
+      // نترك الـ floatingActionButton فارغاً هنا لأننا سنضعه يدوياً بالأسفل
+      bottomNavigationBar: Stack(
+        alignment: Alignment.topCenter,
+        clipBehavior: Clip.none, // للسماح للزر بالخروج عن حدود البار قليلاً
+        children: [
+          // 1. البار السفلي الطبيعي
+          BottomNavigationBar(
+            currentIndex: _selectedIndex,
+            onTap: (index) {
+              if (index == 1) return; // تعطيل القبلة
+              setState(() => _selectedIndex = index);
+            },
+            type: BottomNavigationBarType.fixed,
+            selectedItemColor: Colors.teal,
+            unselectedItemColor: Colors.grey,
+            items: [
+              const BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'الرئيسية',
+              ),
 
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'الرئيسية'),
-          BottomNavigationBarItem(icon: Icon(Icons.explore), label: 'القبلة'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.mosque),
-            label: 'مواقيت الصلاة',
+              // أيقونة القبلة (نجعلها شفافة تماماً ليظهر الزر مكانها)
+              const BottomNavigationBarItem(
+                icon: Opacity(opacity: 0, child: Icon(Icons.explore)),
+                label: '',
+              ),
+
+              const BottomNavigationBarItem(
+                icon: Icon(Icons.mosque),
+                label: 'المواقيت',
+              ),
+              const BottomNavigationBarItem(
+                icon: Icon(Icons.settings),
+                label: 'الإعدادات',
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'الإعدادات',
+
+          // 2. الزر العائم اليدوي (Positioned)
+          Positioned(
+            bottom:
+                MediaQuery.of(context).size.height *
+                0.059, // ارتفاع الزر عن أسفل الشاشة
+            right:
+                MediaQuery.of(context).size.width *
+                0.30, // تحريكه ليقف فوق الخيار الثاني
+            child: GestureDetector(
+              onTap: () => Navigator.pushNamed(context, tasbihScreen),
+              child: Container(
+                width: 55,
+                height: 55,
+                decoration: BoxDecoration(
+                  color: Colors.teal,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.2),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.touch_app,
+                  color: Colors.white,
+                  size: 28,
+                ),
+              ),
+            ),
           ),
         ],
       ),
