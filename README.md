@@ -1,27 +1,50 @@
-# Azkar App (تطبيق الأذكار) 🌙
+# Azkar App | تطبيق الأذكار والمواقيت 🌙
 
-تطبيق إسلامي متكامل تم بناؤه باستخدام **Flutter**، يهدف إلى تزويد المستخدم بالأذكار اليومية وأوقات الصلاة بدقة عالية، مع ميزات متقدمة للتنبيهات والموقع الجغرافي.
+تطبيق إسلامي متكامل مبني باستخدام **Flutter**، يجمع بين الأذكار اليومية وحساب مواقيت الصلاة بدقة عالية، مع دعم كامل للوضع الداكن والفاتح ونظام تنبيهات ذكي.
 
-## 🌟 المميزات الرئيسية (Core Features)
+---
 
-* **أوقات الصلاة:** حساب دقيق لمواقيت الصلاة باستخدام حزمة `adhan`.
-* **الأذكار:** عرض الأذكار مصنفة ومدعومة بملفات JSON محلية (`azkar_by_category.json`).
-* **التنبيهات الذكية:** نظام إشعارات محلي باستخدام `flutter_local_notifications` لتذكير المستخدم بالأذكار في أوقاتها.
-* **تحديد الموقع:** استخدام `geolocator` و `geocoding` لجلب مواقيت الصلاة بناءً على موقع المستخدم الحالي.
-* **إدارة الحالة (State Management):** الاعتماد الكلي على نمط **BLoC/Cubit** لضمان فصل المنطق عن الواجهات وسلاسة الأداء.
-* **التخصيص:** دعم الخطوط العربية من خلال `google_fonts` وتعدد اللغات باستخدام `flutter_localization`.
+## 🚀 الميزات الرئيسية (Key Features)
 
-## 🛠 التقنيات والمكتبات (Tech Stack)
+* **مواقيت الصلاة الدقيقة:** حساب المواقيت باستخدام مكتبة `adhan` وفقاً لـ **الهيئة العامة المصرية للمساحة**.
+* **نظام الأذكار:** عرض الأذكار مصنفة (صباح، مساء، نوم، إلخ) مع عداد تفاعلي لكل ذكر.
+* **التنبيهات الذكية:** إشعارات محلية لتذكير المستخدم بالأذكار اليومية باستخدام `flutter_local_notifications`.
+* **دعم الثيمات (Theming):** دعم كامل للـ **Dark Mode** و **Light Mode** لراحة العين.
+* **تحديد الموقع:** جلب مواقيت الصلاة آلياً بناءً على إحداثيات الموقع (GPS).
+* **إدارة الحالة:** الاعتماد على **BLoC/Cubit** لضمان فصل المنطق عن الواجهات وسلاسة الأداء.
 
-* **Logic:** `bloc` & `flutter_bloc`
-* **Time & Location:** `adhan`, `timezone`, `geolocator`, `geocoding`
-* **Storage:** `shared_preferences` (لحفظ الإعدادات وتفضيلات المستخدم)
-* **UI Components:** `google_fonts`, `cupertino_icons`
-* **Data Handling:** `intl` لتنسيق الوقت والتاريخ.
+---
 
-## 📂 هيكلية البيانات (Assets)
+## 📸 لقطات من التطبيق (Screenshots)
 
-يعتمد التطبيق على بيانات منظمة مخزنة داخل مجلد `assets`:
-* `assets/data/azkar.json`: القائمة الشاملة للأذكار.
-* `assets/data/azkar_by_category.json`: الأذكار مقسمة حسب الفئات (أذكار الصباح، المساء، النوم، إلخ).
-* `assets/images/logo.png`: أيقونة التطبيق الرسمية.
+### ⚪ الوضع الفاتح (Light Mode)
+| الشاشة الرئيسية | مواقيت الصلاة | الإعدادات |
+| :---: | :---: | :---: |
+| ![Home Light](screenshots/home_light.png) | ![Prayer Light](screenshots/prayer_light.png) | ![Settings Light](screenshots/settings_light.png) |
+
+### ⚫ الوضع الداكن (Dark Mode)
+| الشاشة الرئيسية | مواقيت الصلاة | الإعدادات |
+| :---: | :---: | :---: |
+| ![Home Dark](screenshots/home_dark.png) | ![Prayer Dark](screenshots/prayer_dark.png) | ![Settings Dark](screenshots/settings_dark.png) |
+
+---
+
+## 🛠 القرارات التقنية (Technical Decisions)
+
+* **Clean Architecture:** تم تقسيم المشروع إلى طبقات (Data, Domain, Presentation) لسهولة الصيانة.
+* **State Management:** استخدام `Cubit` لإدارة الحالات بشكل خفيف وسريع.
+* **Data Handling:** معالجة البيانات محلياً من ملفات JSON لضمان سرعة الاستجابة بدون إنترنت.
+* **Fonts:** استخدام `google_fonts` لتقديم تجربة بصرية مريحة باللغة العربية.
+
+---
+
+## 📂 هيكلية المشروع (Project Structure)
+
+```text
+lib/
+├── business_logic/     # Cubits (Prayer, Zikir, Category)
+├── data/               # Models & Repositories
+├── presentation/       # Screens & Shared Widgets
+├── services/           # Notifications, Location & Timezone
+├── constants/          # App Themes & Colors
+└── main.dart
