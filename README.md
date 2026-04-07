@@ -1,17 +1,27 @@
-# azkar
+# Azkar App (تطبيق الأذكار) 🌙
 
-A new Flutter project.
+تطبيق إسلامي متكامل تم بناؤه باستخدام **Flutter**، يهدف إلى تزويد المستخدم بالأذكار اليومية وأوقات الصلاة بدقة عالية، مع ميزات متقدمة للتنبيهات والموقع الجغرافي.
 
-## Getting Started
+## 🌟 المميزات الرئيسية (Core Features)
 
-This project is a starting point for a Flutter application.
+* **أوقات الصلاة:** حساب دقيق لمواقيت الصلاة باستخدام حزمة `adhan`.
+* **الأذكار:** عرض الأذكار مصنفة ومدعومة بملفات JSON محلية (`azkar_by_category.json`).
+* **التنبيهات الذكية:** نظام إشعارات محلي باستخدام `flutter_local_notifications` لتذكير المستخدم بالأذكار في أوقاتها.
+* **تحديد الموقع:** استخدام `geolocator` و `geocoding` لجلب مواقيت الصلاة بناءً على موقع المستخدم الحالي.
+* **إدارة الحالة (State Management):** الاعتماد الكلي على نمط **BLoC/Cubit** لضمان فصل المنطق عن الواجهات وسلاسة الأداء.
+* **التخصيص:** دعم الخطوط العربية من خلال `google_fonts` وتعدد اللغات باستخدام `flutter_localization`.
 
-A few resources to get you started if this is your first Flutter project:
+## 🛠 التقنيات والمكتبات (Tech Stack)
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+* **Logic:** `bloc` & `flutter_bloc`
+* **Time & Location:** `adhan`, `timezone`, `geolocator`, `geocoding`
+* **Storage:** `shared_preferences` (لحفظ الإعدادات وتفضيلات المستخدم)
+* **UI Components:** `google_fonts`, `cupertino_icons`
+* **Data Handling:** `intl` لتنسيق الوقت والتاريخ.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 📂 هيكلية البيانات (Assets)
+
+يعتمد التطبيق على بيانات منظمة مخزنة داخل مجلد `assets`:
+* `assets/data/azkar.json`: القائمة الشاملة للأذكار.
+* `assets/data/azkar_by_category.json`: الأذكار مقسمة حسب الفئات (أذكار الصباح، المساء، النوم، إلخ).
+* `assets/images/logo.png`: أيقونة التطبيق الرسمية.
