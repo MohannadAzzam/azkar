@@ -5,7 +5,7 @@ import 'package:geolocator/geolocator.dart';
 class PrayerRepository {
   Future<(PrayerTimes, String)> getTodayPrayerTimes() async {
     Position position;
-    String cityName = "غزة، فلسطين"; 
+    String cityName = "غزة، فلسطين";
 
     try {
       // التأكد من الصلاحيات
@@ -16,7 +16,7 @@ class PrayerRepository {
 
       // محاولة جلب الموقع (مع مهلة قصيرة للمحاكي)
       position = await Geolocator.getCurrentPosition(
-        locationSettings:  AndroidSettings(
+        locationSettings: AndroidSettings(
           accuracy: LocationAccuracy.low,
           forceLocationManager: true,
           timeLimit: Duration(seconds: 3),
@@ -26,9 +26,12 @@ class PrayerRepository {
       // محاولة جلب اسم المدينة من الإحداثيات
       try {
         List<Placemark> placemarks = await placemarkFromCoordinates(
-          position.latitude, position.longitude).timeout(const Duration(seconds: 2));
+          position.latitude,
+          position.longitude,
+        ).timeout(const Duration(seconds: 2));
         if (placemarks.isNotEmpty) {
-          cityName = "${placemarks.first.locality ?? placemarks.first.administrativeArea}, ${placemarks.first.country}";
+          cityName =
+              "${placemarks.first.locality ?? placemarks.first.administrativeArea}, ${placemarks.first.country}";
         }
       } catch (_) {
         cityName = "موقعك الحالي";
@@ -36,22 +39,29 @@ class PrayerRepository {
     } catch (e) {
       // إحداثيات غزة يدوياً في حال فشل الحساسات
       position = Position(
-        latitude: 31.5, longitude: 34.4,
-        timestamp: DateTime.now(), accuracy: 0, altitude: 0, heading: 0, speed: 0,
-        speedAccuracy: 0, altitudeAccuracy: 0, headingAccuracy: 0,
+        latitude: 31.5,
+        longitude: 34.4,
+        timestamp: DateTime.now(),
+        accuracy: 0,
+        altitude: 0,
+        heading: 0,
+        speed: 0,
+        speedAccuracy: 0,
+        altitudeAccuracy: 0,
+        headingAccuracy: 0,
       );
     }
 
     final coordinates = Coordinates(position.latitude, position.longitude);
-    
+
     // ضبط المعايير: Egyptian هي الأنسب لفلسطين ومصر
     // Muslim World League هي الأنسب لأوروبا
-    final params = CalculationMethod.egyptian.getParameters();
+    final params = CalculationMethod.umm_al_qura.getParameters();
     params.madhab = Madhab.shafi;
 
     // تمرير التاريخ الحالي (بناءً على وقت الجهاز)
     // final date = DateComponents.from(DateTime.now());
-    final prayerTimes = PrayerTimes.today(coordinates,  params);
+    final prayerTimes = PrayerTimes.today(coordinates, params);
 
     return (prayerTimes, cityName);
   }

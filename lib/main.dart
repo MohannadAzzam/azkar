@@ -2,7 +2,6 @@
 
 import 'package:azkar/app_router.dart';
 import 'package:azkar/business_logic/prayer_time_cubit/prayer_time_cubit.dart';
-import 'package:azkar/business_logic/theme_cubit/theme_cubit.dart';
 import 'package:azkar/business_logic/zikir_by_category_cubit/zikir_by_category_cubit.dart';
 import 'package:azkar/data/repo/prayer_repository.dart';
 import 'package:azkar/data/repo/zikir_by_category.dart';
@@ -45,8 +44,7 @@ Future<void> main() async {
         BlocProvider(
           create: (context) =>
               PrayerTimeCubit(PrayerRepository())..fetchPrayerTimes(),
-        ),
-        BlocProvider(create: (context) => ThemeCubit()), // تعريف الثيم هنا
+        ), // تعريف الثيم هنا
         BlocProvider(
           create: (context) =>
               ZikirByCategoryCubit(ZikirByCategoryRepository())
