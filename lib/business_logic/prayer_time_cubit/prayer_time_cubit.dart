@@ -52,6 +52,6 @@ class PrayerTimeCubit extends Cubit<PrayerTimeState> {
       }
     });
 
-    // print("تمت جدولة الصلوات بنجاح بالتوقيت المحلي.");
+    print("تمت جدولة الصلوات بنجاح بالتوقيت المحلي.");
   }
 }

@@ -20,10 +20,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
 Future<void> main() async {
   tz.initializeTimeZones();
-  // final prayerRepository = PrayerRepository();
-  // final prayerTimeCubit = PrayerTimeCubit(prayerRepository)..fetchPrayerTimes();
-  // await initializeDateFormatting('ar', "");
-  // debugRepaintRainbowEnabled = true;
+
 
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
